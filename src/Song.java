@@ -1,6 +1,4 @@
 import java.io.File;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 public class Song implements Comparable<Song> {
     private String name;
