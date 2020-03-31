@@ -16,6 +16,8 @@ public class Radio {
         songList.add(new Song(name, author));
     }
 
+    public Song getByIndex(int index) {return songList.get(index);}
+
     public Song getByName(String name) {
         for (Song song: songList) {
             if (song.getName().equals(name)) return song;
