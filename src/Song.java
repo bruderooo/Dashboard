@@ -1,6 +1,7 @@
-import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
 
-public class Song implements Comparable<Song> {
+public class Song  {
     private String name;
     private String author;
 
@@ -9,16 +10,25 @@ public class Song implements Comparable<Song> {
         this.author = author;
     }
 
-    public String getName() {
-        return name;
-    }
+    public String getName() {return name;}
 
-    public String getAuthor() {
-        return author;
-    }
+    public String getAuthor() {return author;}
 
-    @Override
-    public int compareTo(Song song) {
-        return this.name.compareTo(song.getName());
-    }
+
+/*
+    Comparators for comparing by song name or author
+    Usage example: Collections.sort(collectionName, ComparatorObjectName)
+*/
+    Comparator<Song> nameComp = new Comparator<Song>() {
+        @Override
+        public int compare(Song o1, Song o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
+    };
+    Comparator<Song> authorComp = new Comparator<Song>() {
+        @Override
+        public int compare(Song o1, Song o2) {
+            return o1.getAuthor().compareTo(o2.getAuthor());
+        }
+    };
 }
