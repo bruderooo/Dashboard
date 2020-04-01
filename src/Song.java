@@ -19,5 +19,4 @@ public class Song  {
     @Override
     public String toString() {return author + " - \"" + name + "\"";}
 
-
 }
