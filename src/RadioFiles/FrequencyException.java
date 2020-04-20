@@ -1,3 +1,5 @@
+package RadioFiles;
+
 public class FrequencyException extends Exception {
     Double frequency;
 

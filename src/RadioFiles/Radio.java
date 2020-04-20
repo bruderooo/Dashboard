@@ -1,14 +1,13 @@
+package RadioFiles;
 import java.util.ArrayList;
 
-public class Radio implements RadioManager{
+public class Radio implements RadioManager {
     private int volume;
     private Double frequency;
     private ArrayList<Double> Channels;
     private MusicDisc currentDisc;
 
     public Radio(){ volume = 10; }
-
-
 
     public int getVolume() {
         return volume;

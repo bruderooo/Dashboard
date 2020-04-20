@@ -1,4 +1,9 @@
-public class Song  {
+package RadioFiles;
+
+import java.io.Serializable;
+
+
+public class Song implements Serializable {
     private String name;
     private String author;
 

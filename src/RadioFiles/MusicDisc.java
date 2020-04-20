@@ -1,3 +1,5 @@
+package RadioFiles;
+
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
@@ -52,8 +54,8 @@ public class MusicDisc {
         try {
             XStream xStream = new XStream(new DomDriver());
             File file = new File(pathName);
-            Song help = new Song(xStream.fromXML(file));
-            this.songList.add(help);
+            Song help = (Song)(xStream.fromXML(file));
+            this.addSong(help);
         } catch (Exception e) {
             System.out.println("Blad: " + e.getMessage());
         }

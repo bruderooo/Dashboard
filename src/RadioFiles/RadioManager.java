@@ -1,3 +1,5 @@
+package RadioFiles;
+
 public interface RadioManager {
     void loadDisc(MusicDisc disc);
     void volumeUp();
