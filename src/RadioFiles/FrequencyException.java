@@ -7,8 +7,8 @@ public class FrequencyException extends Exception {
         frequency = value;
     }
 
-    public double getOpposite(){
-        if ( frequency == 110.0 ){
+    public double getOpposite() {
+        if (frequency == 110.0) {
             return 86.0;
         } else return 110.0;
     }

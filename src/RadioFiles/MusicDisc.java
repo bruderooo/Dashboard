@@ -14,20 +14,32 @@ public class MusicDisc {
 
     private ArrayList<Song> songList = new ArrayList<>();
 
-    public MusicDisc(){}
+    public MusicDisc() {
+    }
 
-    public MusicDisc(Song... songs) { Collections.addAll(songList, songs); }
+    public MusicDisc(Song... songs) {
+        Collections.addAll(songList, songs);
+    }
 
-    public void addSong(Song song) { songList.add(song);}
+    public void addSong(Song song) {
+        songList.add(song);
+    }
 
     public void addSong(String name, String author) {
         songList.add(new Song(name, author));
     }
 
-    public Song getByIndex(int index) {return songList.get(index);}
+    public Song getByIndex(int index) {
+        try {
+            return songList.get(index);
+        } catch (ArrayIndexOutOfBoundsException ae) {
+            System.out.println(ae.getMessage());
+            return null;
+        }
+    }
 
     public Song getByName(String name) {
-        for (Song song: songList) {
+        for (Song song : songList) {
             if (song.getName().equals(name)) return song;
         }
         return null;
@@ -39,10 +51,10 @@ public class MusicDisc {
 
         String xml = xStream.toXML(this.songList.get(index));
 
-        try	{
-            FileWriter fileWriter = new FileWriter(file);	// Konstrukcja i otwarcie strumienia
-            fileWriter.write(xml);		                    // Zapis do pliku
-            fileWriter.close(); 				            // Zamkniecie strumienia
+        try {
+            FileWriter fileWriter = new FileWriter(file);    // Konstrukcja i otwarcie strumienia
+            fileWriter.write(xml);                            // Zapis do pliku
+            fileWriter.close();                            // Zamkniecie strumienia
         } catch (IOException io) {
             System.out.println(io.getMessage());
         } catch (Exception se) {
@@ -54,7 +66,7 @@ public class MusicDisc {
         try {
             XStream xStream = new XStream(new DomDriver());
             File file = new File(pathName);
-            Song help = (Song)(xStream.fromXML(file));
+            Song help = (Song) (xStream.fromXML(file));
             this.addSong(help);
         } catch (Exception e) {
             System.out.println("Blad: " + e.getMessage());
@@ -79,7 +91,11 @@ public class MusicDisc {
     Comparator<Song> nameComparator = Comparator.comparing(Song::getName);
     Comparator<Song> authorComparator = Comparator.comparing(Song::getAuthor);
 
-    public void sortByName() {songList.sort(nameComparator);}
+    public void sortByName() {
+        songList.sort(nameComparator);
+    }
 
-    public void sortByAuthor() {songList.sort(authorComparator);}
+    public void sortByAuthor() {
+        songList.sort(authorComparator);
+    }
 }

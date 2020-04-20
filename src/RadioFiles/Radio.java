@@ -1,4 +1,5 @@
 package RadioFiles;
+
 import java.util.ArrayList;
 
 public class Radio implements RadioManager {
@@ -7,7 +8,9 @@ public class Radio implements RadioManager {
     private ArrayList<Double> Channels;
     private MusicDisc currentDisc;
 
-    public Radio(){ volume = 10; }
+    public Radio() {
+        volume = 10;
+    }
 
     public int getVolume() {
         return volume;
@@ -19,7 +22,7 @@ public class Radio implements RadioManager {
 
     public void frequencyUp() {
         try {
-            if ( frequency < 110.0) frequency+= 0.01;
+            if (frequency < 110.0) frequency += 0.01;
             else {
                 throw new FrequencyException(frequency);
             }
@@ -30,7 +33,7 @@ public class Radio implements RadioManager {
 
     public void frequencyDown() {
         try {
-            if ( frequency > 86.0 ) frequency-= 0.01;
+            if (frequency > 86.0) frequency -= 0.01;
             else {
                 throw new FrequencyException(frequency);
             }
@@ -43,10 +46,10 @@ public class Radio implements RadioManager {
         currentDisc = disc;
     }
 
-    public void volumeUp(){
+    public void volumeUp() {
         try {
             if (volume < 50) volume++;
-            else{
+            else {
                 throw new VolumeException(volume);
             }
         } catch (VolumeException ve) {
@@ -54,7 +57,7 @@ public class Radio implements RadioManager {
         }
     }
 
-    public void volumeDown(){
+    public void volumeDown() {
         try {
             if (volume > 0) volume--;
             else {

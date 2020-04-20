@@ -3,7 +3,7 @@ package RadioFiles;
 import java.io.Serializable;
 
 
-public class Song implements Serializable {
+public class Song implements Serializable, Comparable<Song> {
     private String name;
     private String author;
 
@@ -17,11 +17,24 @@ public class Song implements Serializable {
         this.author = ((Song) song).getAuthor();
     }
 
-    public String getName() {return name;}
+    public String getName() {
+        return name;
+    }
 
-    public String getAuthor() {return author;}
+    public String getAuthor() {
+        return author;
+    }
 
     @Override
-    public String toString() {return author + " - \"" + name + "\"";}
+    public String toString() {
+        return author + " - \"" + name + "\"";
+    }
 
+    @Override
+    public int compareTo(Song song) {
+        if (this.name.compareTo(song.name) == 0) {
+            return this.author.compareTo(song.author);
+        }
+        return this.name.compareTo(song.name);
+    }
 }
