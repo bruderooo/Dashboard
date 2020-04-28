@@ -1,15 +1,8 @@
 package Lights;
 
-public class HighBeam implements Light {
+public class HighBeam extends Light {
 
-    private boolean isOn;
-
-    public HighBeam() {
-        this.isOn = false;
-    }
-
-    @Override
-    public void switchLight() {
-        this.isOn = !this.isOn;
+    public HighBeam(boolean isOn) {
+        super(isOn);
     }
 }

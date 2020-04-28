@@ -1,7 +1,15 @@
 package Lights;
 
-public interface Light {
+public abstract class Light {
 
-    void switchLight();
+    private boolean isOn;
+
+    public Light(boolean isOn) {
+        this.isOn = isOn;
+    }
+
+    public void switchLight() {
+        this.isOn = !this.isOn;
+    }
 
 }
