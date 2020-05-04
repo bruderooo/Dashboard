@@ -1,6 +1,6 @@
 package Lights;
 
-public abstract class Light {
+public class Light {
 
     private boolean isOn;
 
@@ -9,6 +9,11 @@ public abstract class Light {
     }
 
     public void switchLight() {
+        if (this.isOn) {
+            System.out.println("Wlaczone");
+        } else {
+            System.out.println("Wylacczone");
+        }
         this.isOn = !this.isOn;
     }
 

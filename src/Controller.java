@@ -1,5 +1,17 @@
+import Lights.TurnSignal;
+
 public class Controller {
-    public void metoda(){
+    private TurnSignal turnSignal;
+
+    public void metoda() {
         System.out.println("o cie panie");
+    }
+
+    public void roundLeft() {
+
+    }
+
+    public void roundRight() {
+        this.turnSignal.turnRight();
     }
 }
