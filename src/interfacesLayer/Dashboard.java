@@ -16,7 +16,7 @@ public class Dashboard extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("interfacesLayer/sample.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
         primaryStage.setTitle("Scenic Dashboard");
 
         Scene scene = new Scene(root, 1280, 400);

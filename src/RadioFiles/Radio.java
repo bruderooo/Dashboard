@@ -2,7 +2,7 @@ package RadioFiles;
 
 import java.util.ArrayList;
 
-public class Radio implements RadioManager {
+public class Radio {
     private int volume;
     private Double frequency;
     private ArrayList<Double> Channels;
