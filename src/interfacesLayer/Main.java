@@ -2,6 +2,7 @@ package interfacesLayer;
 
 import RadioFiles.MusicDisc;
 import RadioFiles.Radio;
+import dataLayer.RadioSerialization;
 
 public class Main {
 
@@ -13,11 +14,12 @@ public class Main {
         disc1.addSong("You're Beautiful", "James Blunt");
         disc1.addSong("Perfect", "Ed Sheeran");
 
+        RadioSerialization radioSerialization = new RadioSerialization();
         String pathName = "zapisz.xml";
-        disc1.saveSongToHardDisc(2, pathName);
+        radioSerialization.saveSongToHardDisc(disc1, 2, pathName);
 
         pathName = "odczytaj.xml";
-        disc1.openSongFromHardDisc(pathName);
+        radioSerialization.openSongFromHardDisc(disc1, pathName);
 
         System.out.println(disc1.toString());
 
