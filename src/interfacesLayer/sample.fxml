@@ -4,12 +4,12 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane fx:id="mainStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<StackPane fx:id="mainStackPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="interfacesLayer.Controller">
     <children>
         <Button mnemonicParsing="false" onAction="#metoda" prefHeight="26.0" prefWidth="65.0" text="Cos" textAlignment="CENTER" />
         <ImageView fitHeight="150.0" fitWidth="200.0" onKeyPressed="#roundLeft" pickOnBounds="true" preserveRatio="true" scaleX="0.2" scaleY="0.2" translateX="200.0" translateY="180.0">
             <image>
-                <Image url="@../pics/kierunkowskazPrawoOff.png" />
+                <Image url="@../../pics/kierunkowskazPrawoOff.png" />
             </image>
         </ImageView>
     </children>

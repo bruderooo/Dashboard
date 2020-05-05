@@ -1,3 +1,5 @@
+package logicLayer.mirrors;
+
 public class RearViewMirror implements Mirror {
 
     // State w tej klasie jest zmienną całkowitą ponieważ

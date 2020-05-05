@@ -1,3 +1,5 @@
+package logicLayer.sensors;
+
 public class AccumulatorLoadSensor implements Sensor {
 
     private static double maxLoad = 1.0;

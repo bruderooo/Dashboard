@@ -1,4 +1,6 @@
-import Lights.TurnSignal;
+package interfacesLayer;
+
+import logicLayer.lights.TurnSignal;
 
 public class Controller {
     private TurnSignal turnSignal;

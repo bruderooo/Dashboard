@@ -1,4 +1,6 @@
-public class OilLevelSensor implements Sensor{
+package logicLayer.sensors;
+
+public class OilLevelSensor implements Sensor {
 
     private static double maximum = 4.0;
     private double currentAmount;

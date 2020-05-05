@@ -1,3 +1,5 @@
+package logicLayer.mirrors;
+
 public class WingMirror implements Mirror {
 
     // State w tej klasie jest zmienną logiczną ponieważ

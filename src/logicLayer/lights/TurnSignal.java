@@ -1,4 +1,4 @@
-package Lights;
+package logicLayer.lights;
 
 public class TurnSignal {
     private Light leftLight;

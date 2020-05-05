@@ -1,3 +1,5 @@
+package logicLayer.sensors;
+
 public class OilTemperatureSensor implements Sensor {
 
     private static double maximumTemperature = 260.0;
