@@ -1,7 +1,7 @@
 package interfacesLayer;
 
-import RadioFiles.MusicDisc;
-import RadioFiles.Radio;
+import logicLayer.radio.MusicDisc;
+import logicLayer.radio.Radio;
 import dataLayer.RadioSerialization;
 
 public class Main {

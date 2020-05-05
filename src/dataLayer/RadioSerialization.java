@@ -1,7 +1,7 @@
 package dataLayer;
 
-import RadioFiles.MusicDisc;
-import RadioFiles.Song;
+import logicLayer.radio.MusicDisc;
+import logicLayer.radio.Song;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 

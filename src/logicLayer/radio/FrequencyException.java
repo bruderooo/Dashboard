@@ -1,4 +1,4 @@
-package RadioFiles;
+package logicLayer.radio;
 
 public class FrequencyException extends Exception {
     Double frequency;
