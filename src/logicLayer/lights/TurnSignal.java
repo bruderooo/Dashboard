@@ -5,8 +5,8 @@ public class TurnSignal {
     private Light rightLight;
 
     public TurnSignal() {
-        this.leftLight = new Light(false);
-        this.rightLight = new Light(false);
+        this.leftLight = new Light();
+        this.rightLight = new Light();
     }
 
     public void turnLeft() {

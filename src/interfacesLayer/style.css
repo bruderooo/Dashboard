@@ -1,0 +1,31 @@
+.bodybg{
+    -fx-background-image: url('../images/BGimg.png');
+    -fx-background-size: 100% 100%;
+}
+
+.lowBeam {
+    -fx-graphic: url('../images/mijaniaSwiatlaOff.png');
+}
+
+.lowBeam:selected {
+    -fx-graphic: url('../images/mijaniaSwiatla.png')
+}
+
+.fullBeam {
+    -fx-graphic: url('../images/dlugieSwiatlaOff.png');
+}
+
+.fullBeam:selected {
+    -fx-graphic: url('../images/dlugieSwiatla.png');
+}
+
+.startButton {
+    -fx-background-radius: 50em;
+    -fx-min-width: 30px;
+    -fx-min-height: 30px;
+    -fx-max-width: 30px;
+    -fx-max-height: 30px;
+    -fx-background-color: -fx-body-color;
+    -fx-background-insets: 0px;
+    -fx-padding: 0px;
+}
