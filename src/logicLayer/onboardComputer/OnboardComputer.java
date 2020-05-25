@@ -1,6 +1,6 @@
 package logicLayer.onboardComputer;
 
-import logicLayer.lights.HighBeam;
+import logicLayer.lights.FullBeam;
 import logicLayer.lights.LowBeam;
 import logicLayer.lights.TurnSignal;
 import logicLayer.mirrors.RearViewMirror;
@@ -12,7 +12,7 @@ import logicLayer.sensors.OilTemperatureSensor;
 public class OnboardComputer {
     // Initializing Ligts
     private LowBeam lowBeam;
-    private HighBeam highBeam;
+    private FullBeam highBeam;
     private TurnSignal turnSignals;
 
     // Initializing mirrors
@@ -29,7 +29,7 @@ public class OnboardComputer {
     public OnboardComputer() {
         // Initializing Ligts
         lowBeam = new LowBeam();
-        highBeam = new HighBeam();
+        highBeam = new FullBeam();
         turnSignals = new TurnSignal();
 
         // Initializing mirrors
@@ -43,4 +43,11 @@ public class OnboardComputer {
         oilTemperature = new OilTemperatureSensor(20.0);
     }
 
+    public LowBeam getLowBeam() {
+        return lowBeam;
+    }
+
+    public FullBeam getHighBeam() {
+        return highBeam;
+    }
 }

@@ -16,8 +16,8 @@ public class OilTemperatureSensor implements Sensor {
 
     @Override
     public int status() {
-        if (currentTemperature <= maximumTemperature * 0.9 && currentTemperature >= maximumTemperature * 0.7) return 1;
-        else if (currentTemperature < 0.7 * maximumTemperature && currentTemperature >= 0.05 * maximumTemperature) return 0;
-        else return 2;
+        if (currentTemperature <= maximumTemperature * 0.9 && currentTemperature >= maximumTemperature * 0.7) return CHECK;
+        else if (currentTemperature < 0.7 * maximumTemperature && currentTemperature >= -5.0) return GOOD;
+        else return BAD;
     }
 }

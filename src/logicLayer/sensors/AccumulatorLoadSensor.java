@@ -16,8 +16,8 @@ public class AccumulatorLoadSensor implements Sensor {
 
     @Override
     public int status() {
-        if (currentLoad <= maxLoad && currentLoad >= 0.95 * maxLoad) return 0;
-        if (currentLoad < 0.9 * maxLoad && currentLoad >= 0.75 * maxLoad) return 1;
-        else return 2;
+        if (currentLoad <= maxLoad && currentLoad >= 0.95 * maxLoad) return GOOD;
+        if (currentLoad < 0.9 * maxLoad && currentLoad >= 0.75 * maxLoad) return CHECK;
+        else return BAD;
     }
 }

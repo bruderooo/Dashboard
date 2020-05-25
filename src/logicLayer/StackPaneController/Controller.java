@@ -16,9 +16,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
+import logicLayer.onboardComputer.OnboardComputer;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
 
 public class Controller {
 
@@ -29,34 +29,63 @@ public class Controller {
     public Label clock, currentVelocity;
 
     private boolean isOn;
+    private OnboardComputer computer;
+    private Timeline clockTimeline;
 
     @FXML
     public void lowBeamAction(){
-        //TODO integracja z logika
+        updateLowFullBeams();
     }
     public void fullBeamAction() {
-        //TODO integracja z logika
+        updateLowFullBeams();
     }
     public void startEngine() {
+        if (!isOn) {
+            isOn = true;
 
-        initClock();
+            clockON();
+
+
+        } else {
+            isOn = false;
+            clockOFF();
+            //TODO wszystkie swiatla off ???
+            // wylaczanie samochodu
+        }
     }
 
     @FXML
     public void initialize() {
+        computer = new OnboardComputer();
+        isOn = false;
+
         clock.setBackground(new Background(new BackgroundFill(Color.rgb(150,150,150), CornerRadii.EMPTY, Insets.EMPTY)));
-        currentVelocity.setBackground(new Background(new BackgroundFill(Color.rgb(150,150,150), CornerRadii.EMPTY, Insets.EMPTY)));
         clock.setAlignment(Pos.CENTER_RIGHT);
+        currentVelocity.setBackground(new Background(new BackgroundFill(Color.rgb(150,150,150), CornerRadii.EMPTY, Insets.EMPTY)));
         currentVelocity.setAlignment(Pos.CENTER_RIGHT);
 
     }
 
-    private void initClock() {
-        Timeline clockTimeline = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+    private void clockON() {
+        clockTimeline = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             clock.setText(LocalDateTime.now().format(formatter));
         }), new KeyFrame(Duration.millis(100)));
         clockTimeline.setCycleCount(Animation.INDEFINITE);
         clockTimeline.play();
+    }
+
+    private void clockOFF() {
+        clockTimeline.stop();
+        clock.setText("00:00:00");
+    }
+
+    private void updateLowFullBeams() {
+        if (computer.getHighBeam().isOn() != fullBeam.isSelected()) {
+            computer.getHighBeam().switchLight();
+        }
+        if (computer.getLowBeam().isOn() != lowBeam.isSelected()) {
+            computer.getLowBeam().switchLight();
+        }
     }
 }

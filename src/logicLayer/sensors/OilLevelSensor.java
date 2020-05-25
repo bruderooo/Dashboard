@@ -17,8 +17,8 @@ public class OilLevelSensor implements Sensor {
 
     @Override
     public int status() {
-        if (currentAmount <= maximum && currentAmount >= maximum * 0.9) return 0;
-        else if (currentAmount < 0.9 * maximum && currentAmount >= 0.75 * maximum) return 1;
-        else return 2;
+        if (currentAmount <= maximum && currentAmount >= maximum * 0.9) return GOOD;
+        else if (currentAmount < 0.9 * maximum && currentAmount >= 0.75 * maximum) return CHECK;
+        else return BAD;
     }
 }

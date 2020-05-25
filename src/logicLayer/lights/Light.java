@@ -5,6 +5,10 @@ public class Light {
 
     public Light() { this.isOn = false; }
 
+    public boolean isOn() {
+        return isOn;
+    }
+
     public void switchLight() {
         isOn = !isOn;
     }
