@@ -2,11 +2,12 @@ package logicLayer.sensors;
 
 public class OilLevelSensor implements Sensor {
 
+    // 4.0 is full
     private static double maximum = 4.0;
     private double currentAmount;
 
-    public OilLevelSensor(double currentAmount) {
-        this.currentAmount = currentAmount;
+    public OilLevelSensor(double amount) {
+        this.currentAmount = amount;
     }
 
     @Override

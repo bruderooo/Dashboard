@@ -8,5 +8,4 @@ public interface Repository<T> {
 
     T get(int index);
 
-
 }

@@ -5,8 +5,8 @@ public class AccumulatorLoadSensor implements Sensor {
     private static double maxLoad = 1.0;
     private double currentLoad;
 
-    public AccumulatorLoadSensor(double currentLoad) {
-        this.currentLoad = currentLoad;
+    public AccumulatorLoadSensor() {
+        this.currentLoad = 1.0;
     }
 
     @Override

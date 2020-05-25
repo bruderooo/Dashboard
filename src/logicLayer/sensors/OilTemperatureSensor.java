@@ -5,8 +5,8 @@ public class OilTemperatureSensor implements Sensor {
     private static double maximumTemperature = 260.0;
     private double currentTemperature;
 
-    public OilTemperatureSensor(double currentTemperature) {
-        this.currentTemperature = currentTemperature;
+    public OilTemperatureSensor(double temperature) {
+        this.currentTemperature = temperature;
     }
 
     @Override
