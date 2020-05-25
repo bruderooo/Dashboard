@@ -2,10 +2,28 @@ package dataLayer;
 
 import logicLayer.Route.Route;
 
-public class RouteRepository {
+import java.util.ArrayList;
 
-    Route[] routes;
+public class RouteRepository implements Repository<Route>{
 
-    public RouteRepository() { }
+    private ArrayList<Route> routes;
 
+    public RouteRepository() {
+        routes = new ArrayList<>();
+    }
+
+    @Override
+    public void add(Route item) {
+        routes.add(item);
+    }
+
+    @Override
+    public void remove(Route item) {
+        routes.remove(item);
+    }
+
+    @Override
+    public Route get(int index) {
+        return routes.get(index);
+    }
 }
