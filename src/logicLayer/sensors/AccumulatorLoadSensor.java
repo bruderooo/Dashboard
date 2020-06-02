@@ -2,11 +2,11 @@ package logicLayer.sensors;
 
 public class AccumulatorLoadSensor implements Sensor {
 
-    private static double maxLoad = 1.0;
+    private static double maxLoad = 100.0;
     private double currentLoad;
 
     public AccumulatorLoadSensor() {
-        this.currentLoad = 1.0;
+        this.currentLoad = 100.0;
     }
 
     @Override

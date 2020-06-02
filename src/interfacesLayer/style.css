@@ -19,6 +19,10 @@
     -fx-graphic: url('../images/dlugieSwiatla.png');
 }
 
+.fuel {
+    -fx-graphic: url('../images/fuel.png');
+}
+
 .startButton {
     -fx-background-radius: 50em;
     -fx-min-width: 30px;
@@ -28,4 +32,13 @@
     -fx-background-color: -fx-body-color;
     -fx-background-insets: 0px;
     -fx-padding: 0px;
+}
+
+.blinker {
+    -fx-shape: "M 390 240 L 480 240 L 480 300 L 390 300 L 390 360 L 300 270 L 390 180 Z";
+    -fx-background-color: #000000;
+}
+
+.mirrorsButton:selected {
+    -fx-background-color: #00b9ea;
 }

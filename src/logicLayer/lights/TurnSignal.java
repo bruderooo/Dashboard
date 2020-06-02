@@ -10,11 +10,22 @@ public class TurnSignal {
     }
 
     public void turnLeft() {
+        if( this.rightLight.isOn() ) this.rightLight.switchLight();
+
         this.leftLight.switchLight();
     }
 
     public void turnRight() {
+        if( this.leftLight.isOn() ) this.leftLight.switchLight();
+
         this.rightLight.switchLight();
     }
 
+    public Light getLeftLight() {
+        return leftLight;
+    }
+
+    public Light getRightLight() {
+        return rightLight;
+    }
 }
