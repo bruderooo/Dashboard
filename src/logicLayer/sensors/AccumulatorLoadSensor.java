@@ -2,11 +2,15 @@ package logicLayer.sensors;
 
 public class AccumulatorLoadSensor implements Sensor {
 
-    private static double maxLoad = 100.0;
+    public static double maxLoad = 100.0;
     private double currentLoad;
 
     public AccumulatorLoadSensor() {
-        this.currentLoad = 100.0;
+        this.currentLoad = maxLoad;
+    }
+
+    public void setCurrentLoad(double currentLoad) {
+        this.currentLoad = currentLoad;
     }
 
     @Override
@@ -16,8 +20,8 @@ public class AccumulatorLoadSensor implements Sensor {
 
     @Override
     public int status() {
-        if (currentLoad <= maxLoad && currentLoad >= 0.95 * maxLoad) return GOOD;
-        if (currentLoad < 0.9 * maxLoad && currentLoad >= 0.75 * maxLoad) return CHECK;
+        if (currentLoad <= maxLoad && currentLoad >= 0.6 * maxLoad) return GOOD;
+        if (currentLoad < 0.6 * maxLoad && currentLoad >= 0.1 * maxLoad) return CHECK;
         else return BAD;
     }
 }

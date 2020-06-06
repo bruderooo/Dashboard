@@ -3,7 +3,8 @@ package logicLayer.sensors;
 public class FuelLevelSensor implements Sensor {
     private double fuelAmount;
     public static final double maxFuelAmount = 80.0;
-    public static final double fuelPerOneKm = 100;
+    public static final double fuelPerOneKm = 0.097;
+
 
     public FuelLevelSensor() {
         this.fuelAmount = maxFuelAmount;

@@ -2,6 +2,9 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
@@ -12,63 +15,116 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" prefHeight="720.0" prefWidth="1280.0" styleClass="bodybg" stylesheets="@style.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logicLayer.StackPaneController.Controller">
+
+<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logicLayer.StackPaneController.Controller">
    <children>
-      <Label fx:id="clock" layoutX="705.0" layoutY="303.0" prefHeight="24.0" prefWidth="104.0" text="00:00:00">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <ToggleButton fx:id="lowBeam" layoutX="606.0" layoutY="163.0" mnemonicParsing="false" onAction="#lowBeamAction" scaleX="0.3" scaleY="0.3" styleClass="lowBeam">
-         <toggleGroup>
-            <ToggleGroup fx:id="lowFullBeamsGroup" />
-         </toggleGroup>
-      </ToggleButton>
-      <ToggleButton fx:id="fullBeam" layoutX="656.0" layoutY="169.0" mnemonicParsing="false" onAction="#fullBeamAction" scaleX="0.3" scaleY="0.3" styleClass="fullBeam" toggleGroup="$lowFullBeamsGroup" />
-      <Button fx:id="startButton" layoutX="582.0" layoutY="345.0" mnemonicParsing="false" onAction="#startEngine" styleClass="startButton" text="Start" textAlignment="CENTER">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font>
-      </Button>
-      <Label fx:id="velocity" layoutX="705.0" layoutY="244.0" prefHeight="24.0" prefWidth="104.0" text="0.0 km/h">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Button fx:id="leftBlinker" layoutX="620.0" layoutY="191.0" mnemonicParsing="false" onAction="#leftBlinkerPress" scaleX="2.0" styleClass="blinker" />
-      <Button fx:id="rightBlinker" layoutX="767.0" layoutY="191.0" mnemonicParsing="false" onAction="#rightBlinkerPress" rotate="180.0" scaleX="2.0" styleClass="blinker" />
-      <ToggleButton fx:id="mirrorsButton" layoutX="167.0" layoutY="271.0" mnemonicParsing="false" onAction="#mirrorsButtonAction" prefHeight="46.0" prefWidth="86.0" styleClass="mirrorsButton" text="mirrors">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font></ToggleButton>
-      <ProgressBar fx:id="accumulatorBar" layoutX="332.0" layoutY="252.0" prefHeight="12.0" prefWidth="170.0" progress="0.0" />
-      <ProgressBar fx:id="oilBar" layoutX="333.0" layoutY="288.0" prefHeight="12.0" prefWidth="170.0" progress="0.0" />
-      <Label layoutX="332.0" layoutY="236.0" text="Akumulator">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="332.0" layoutY="271.0" text="Poziom oleju">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Label>
-      <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="840.0" layoutY="221.0">
-         <image>
-            <Image url="@../images/fuel.png" />
-         </image>
-      </ImageView>
-      <VBox fx:id="fuelBar" layoutX="815.0" layoutY="189.0" prefHeight="64.0" prefWidth="16.0">
+      <MenuBar>
+        <menus>
+          <Menu mnemonicParsing="false" text="Uzupełnij">
+            <items>
+              <MenuItem mnemonicParsing="false" onAction="#refillFuel" text="Zbiornik paliwa" />
+                  <MenuItem mnemonicParsing="false" onAction="#refillOil" text="Olej" />
+                  <MenuItem mnemonicParsing="false" onAction="#refillAccumulator"  text="Naładuj akumulator" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Trasy">
+            <items>
+              <MenuItem mnemonicParsing="false" text="TODO" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+      <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" prefHeight="720.0" prefWidth="1280.0" styleClass="bodybg" stylesheets="@style.css">
          <children>
-            <Rectangle fx:id="fuelRect7" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
-            <Rectangle fx:id="fuelRect6" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
-            <Rectangle fx:id="fuelRect5" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
-            <Rectangle fx:id="fuelRect4" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
-            <Rectangle fx:id="fuelRect3" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
-            <Rectangle fx:id="fuelRect2" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
-            <Rectangle fx:id="fuelRect1" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
-            <Rectangle fx:id="fuelRect0" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+            <Label fx:id="clock" layoutX="705.0" layoutY="303.0" prefHeight="24.0" prefWidth="104.0" text="00:00:00">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ToggleButton fx:id="lowBeam" layoutX="606.0" layoutY="163.0" mnemonicParsing="false" onAction="#lowBeamAction" scaleX="0.3" scaleY="0.3" styleClass="lowBeam">
+               <toggleGroup>
+                  <ToggleGroup fx:id="lowFullBeamsGroup" />
+               </toggleGroup>
+            </ToggleButton>
+            <ToggleButton fx:id="fullBeam" layoutX="656.0" layoutY="169.0" mnemonicParsing="false" onAction="#fullBeamAction" scaleX="0.3" scaleY="0.3" styleClass="fullBeam" toggleGroup="$lowFullBeamsGroup" />
+            <Button fx:id="startButton" layoutX="582.0" layoutY="345.0" mnemonicParsing="false" onAction="#startEngine" styleClass="startButton" text="Start" textAlignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
+            <Label fx:id="velocity" layoutX="705.0" layoutY="244.0" prefHeight="24.0" prefWidth="104.0" text="0.0 km/h">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Button fx:id="leftBlinker" layoutX="620.0" layoutY="191.0" mnemonicParsing="false" onAction="#leftBlinkerPress" scaleX="2.0" styleClass="blinker" />
+            <Button fx:id="rightBlinker" layoutX="767.0" layoutY="191.0" mnemonicParsing="false" onAction="#rightBlinkerPress" rotate="180.0" scaleX="2.0" styleClass="blinker" />
+            <ToggleButton fx:id="mirrorsButton" layoutX="167.0" layoutY="271.0" mnemonicParsing="false" onAction="#mirrorsButtonAction" prefHeight="46.0" prefWidth="86.0" styleClass="mirrorsButton" text="mirrors">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </ToggleButton>
+            <ProgressBar fx:id="accumulatorBar" layoutX="332.0" layoutY="252.0" prefHeight="12.0" prefWidth="170.0" progress="0.0" />
+            <ProgressBar fx:id="oilBar" layoutX="333.0" layoutY="288.0" prefHeight="12.0" prefWidth="170.0" progress="0.0" />
+            <Label layoutX="332.0" layoutY="236.0" text="Akumulator">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="332.0" layoutY="271.0" text="Poziom oleju">
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="30.0" fitWidth="30.0" layoutX="840.0" layoutY="221.0">
+               <image>
+                  <Image url="@../images/fuel.png" />
+               </image>
+            </ImageView>
+            <VBox fx:id="fuelBar" layoutX="815.0" layoutY="189.0" prefHeight="64.0" prefWidth="16.0">
+               <children>
+                  <Rectangle fx:id="fuelRect7" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                  <Rectangle fx:id="fuelRect6" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                  <Rectangle fx:id="fuelRect5" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                  <Rectangle fx:id="fuelRect4" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                  <Rectangle fx:id="fuelRect3" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                  <Rectangle fx:id="fuelRect2" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                  <Rectangle fx:id="fuelRect1" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+                  <Rectangle fx:id="fuelRect0" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
+               </children>
+            </VBox>
+            <Label fx:id="fuelConsumptionLabel" layoutX="705.0" layoutY="352.0" text="0.0 L/100KM" />
+            <ImageView fx:id="accImg2" fitHeight="27.0" fitWidth="49.0" layoutX="350.0" layoutY="362.0">
+               <image>
+                  <Image url="@../images/aku2.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="accImg1" fitHeight="27.0" fitWidth="49.0" layoutX="350.0" layoutY="362.0">
+               <image>
+                  <Image url="@../images/aku1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="accImg0" fitHeight="27.0" fitWidth="49.0" layoutX="350.0" layoutY="362.0">
+               <image>
+                  <Image url="@../images/aku0.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="oilImg0" fitHeight="25.0" fitWidth="66.0" layoutX="411.0" layoutY="363.0">
+               <image>
+                  <Image url="@../images/olej0.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="oilImg1" fitHeight="24.0" fitWidth="66.0" layoutX="411.0" layoutY="363.0">
+               <image>
+                  <Image url="@../images/olej1.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="oilImg2" fitHeight="25.0" fitWidth="66.0" layoutX="411.0" layoutY="363.0">
+               <image>
+                  <Image url="@../images/olej2.png" />
+               </image>
+            </ImageView>
          </children>
-      </VBox>
+      </Pane>
    </children>
-</Pane>
+</VBox>

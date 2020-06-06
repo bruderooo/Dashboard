@@ -4,10 +4,10 @@ package logicLayer.StackPaneController;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
@@ -16,11 +16,14 @@ import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import javafx.fxml.FXML;
 import logicLayer.onboardComputer.OnboardComputer;
+import logicLayer.sensors.AccumulatorLoadSensor;
 import logicLayer.sensors.FuelLevelSensor;
-
+import logicLayer.sensors.OilLevelSensor;
+import logicLayer.sensors.Sensor;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
 
 public class Controller {
 
@@ -33,10 +36,13 @@ public class Controller {
     public ProgressBar accumulatorBar, oilBar;
     public Rectangle fuelRect0, fuelRect1, fuelRect2, fuelRect3, fuelRect4, fuelRect5, fuelRect6, fuelRect7;
     public VBox fuelBar;
+    public Label fuelConsumptionLabel;
+    public ImageView accImg0,accImg1,accImg2,oilImg0, oilImg1,oilImg2;
 
-    private boolean isOn, speedingUp, slowingDown;
+    private boolean carOn, appOn = true, speedingUp = false, slowingDown = false;
     private OnboardComputer computer;
     private Timeline clockTimeline, leftBlinkerTimeline, rightBlinkerTimeline, velocityTimeline;
+    private DecimalFormat dec = new DecimalFormat("#0.0");
 
 
     @FXML
@@ -49,49 +55,72 @@ public class Controller {
     }
 
     public void startEngine() {
-        if (!isOn) {
-            isOn = true;
+        if (!carOn) {
+            carOn = true;
 
-            computer.getFuel().setFuelAmount(FuelLevelSensor.maxFuelAmount);
             updateFuelBar();
             clockON();
             velocityMeterON();
 
 
         } else {
-            isOn = false;
-            computer.getFuel().setFuelAmount(0.0);
+            carOn = false;
             updateFuelBar();
             clockOFF();
             velocityMeterOFF();
             // wylaczanie samochodu
+
+            fadeOilControls();
+            fadeAccControls();
+            accImg0.setOpacity(100);
+            oilImg0.setOpacity(100);
         }
     }
 
     @FXML
     public void initialize() {
         computer = new OnboardComputer();
+        Thread updatingThread = new Thread( () -> {
+            while (appOn) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                updateSensors();
+            }
 
-        isOn = false;
+        });
+
+        updatingThread.start();
+
+        fadeOilControls();
+        fadeAccControls();
+        accImg0.setOpacity(100);
+        oilImg0.setOpacity(100);
+
+        fadeOilControls();
+        fadeAccControls();
+        accImg0.setOpacity(100);
+        oilImg0.setOpacity(100);
+
+        carOn = false;
         speedingUp = false;
         slowingDown = false;
-
-
-        accumulatorBar.setProgress(0.70);
-        oilBar.setProgress(0.80);
 
 
         mirrorsButton.setText("Rozłóż\nLusterka");
         mirrorsButton.setAlignment(Pos.CENTER);
 
         // fill fuel level
-        computer.getFuel().setFuelAmount(FuelLevelSensor.maxFuelAmount);
+        computer.getFuel().setFuelAmount(FuelLevelSensor.maxFuelAmount*71/80);
 
         // color and position in of values in clock and velocity meter
         clock.setBackground(new Background(new BackgroundFill(Color.rgb(150,150,150), CornerRadii.EMPTY, Insets.EMPTY)));
         clock.setAlignment(Pos.CENTER_RIGHT);
         velocity.setBackground(new Background(new BackgroundFill(Color.rgb(150,150,150), CornerRadii.EMPTY, Insets.EMPTY)));
         velocity.setAlignment(Pos.CENTER_RIGHT);
+        fuelConsumptionLabel.setAlignment(Pos.CENTER_RIGHT);
 
         // making it so "focus" can not traverse between buttons
         lowBeam.setFocusTraversable(false);
@@ -117,16 +146,8 @@ public class Controller {
 
     private void velocityMeterON() {
         velocityTimeline = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-            // calculate current velocity
-            computer.getVelocity().calculate(speedingUp, slowingDown);
-
-            // calculate fuel consumption
-            computer.fuelConsumption();
-
-            updateFuelBar();
-
-            DecimalFormat dec = new DecimalFormat("#0.0");
             velocity.setText( dec.format(computer.getVelocity().getCurrentVelocity()) + " km/h");
+            fuelConsumptionLabel.setText(dec.format(computer.fuelConsumption(speedingUp || slowingDown)) + "L/100KM");
         }), new KeyFrame(Duration.millis(500)));
         velocityTimeline.setCycleCount(Animation.INDEFINITE);
         velocityTimeline.play();
@@ -206,9 +227,15 @@ public class Controller {
         if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S) {
             slowingDown = false;
         }
+        if (keyEvent.getCode() == KeyCode.RIGHT) {
+            rightBlinkerPress();
+        }
+        if (keyEvent.getCode() == KeyCode.LEFT) {
+            leftBlinkerPress();
+        }
     }
 
-    public void mirrorsButtonAction(ActionEvent actionEvent) {
+    public void mirrorsButtonAction() {
         if (mirrorsButton.isSelected()){
             computer.getRearViewMirror().openMirror();
             computer.getWingMirrorLeft().openMirror();
@@ -229,41 +256,95 @@ public class Controller {
         } else {
             fuelRect0.setFill(Color.web("#7B91F2"));
         }
-        if (computer.getFuel().getValue() <= 10.0 ) {
+        if (computer.getFuel().getValue() <= FuelLevelSensor.maxFuelAmount*1/8 ) {
             fuelRect1.setFill(Color.web("#616160"));
         } else {
             fuelRect1.setFill(Color.web("#7B91F2"));
         }
-        if (computer.getFuel().getValue() <= 20.0 ) {
+        if (computer.getFuel().getValue() <= FuelLevelSensor.maxFuelAmount*2/8 ) {
             fuelRect2.setFill(Color.web("#616160"));
         } else {
             fuelRect2.setFill(Color.web("#7B91F2"));
         }
-        if (computer.getFuel().getValue() <= 30.0 ) {
+        if (computer.getFuel().getValue() <= FuelLevelSensor.maxFuelAmount*3/8 ) {
             fuelRect3.setFill(Color.web("#616160"));
         } else {
             fuelRect3.setFill(Color.web("#7B91F2"));
         }
-        if (computer.getFuel().getValue() <= 40.0 ) {
+        if (computer.getFuel().getValue() <= FuelLevelSensor.maxFuelAmount*4/8 ) {
             fuelRect4.setFill(Color.web("#616160"));
         } else {
             fuelRect4.setFill(Color.web("#7B91F2"));
         }
-        if (computer.getFuel().getValue() <= 50.0 ) {
+        if (computer.getFuel().getValue() <= FuelLevelSensor.maxFuelAmount*5/8 ) {
             fuelRect5.setFill(Color.web("#616160"));
         } else {
             fuelRect5.setFill(Color.web("#7B91F2"));
         }
-        if (computer.getFuel().getValue() <= 60.0 ) {
+        if (computer.getFuel().getValue() <= FuelLevelSensor.maxFuelAmount*6/8 ) {
             fuelRect6.setFill(Color.web("#616160"));
         } else {
             fuelRect6.setFill(Color.web("#7B91F2"));
         }
-        if (computer.getFuel().getValue() <=70.0 ) {
+        if (computer.getFuel().getValue() <=FuelLevelSensor.maxFuelAmount*7/8 ) {
             fuelRect7.setFill(Color.web("#616160"));
         } else {
             fuelRect7.setFill(Color.web("#7B91F2"));
         }
     }
 
+    public void fadeAccControls() {
+        accImg0.setOpacity(0);
+        accImg1.setOpacity(0);
+        accImg2.setOpacity(0);
+    }
+
+    public void fadeOilControls() {
+        oilImg0.setOpacity(0);
+        oilImg1.setOpacity(0);
+        oilImg2.setOpacity(0);
+    }
+
+    public void updateControls() {
+        fadeAccControls();
+        fadeOilControls();
+
+        if (computer.getAccumulator().status() == Sensor.CHECK) accImg1.setOpacity(100);
+        else if (computer.getAccumulator().status() == Sensor.BAD)  accImg2.setOpacity(100);
+        else accImg0.setOpacity(100);
+
+        if (computer.getOilLevel().status() == Sensor.CHECK) oilImg1.setOpacity(100);
+        else if (computer.getOilLevel().status() == Sensor.BAD) oilImg2.setOpacity(100);
+        else oilImg0.setOpacity(100);
+    }
+
+    public void updateBars() {
+        accumulatorBar.setProgress(computer.getAccumulator().getValue()/100);
+        oilBar.setProgress(computer.getOilLevel().getValue()/100);
+        updateFuelBar();
+    }
+
+    public void  updateSensors() {
+        computer.getVelocity().calculate(speedingUp, slowingDown);
+        computer.updateAccumulatorStatus(carOn);
+        computer.updateOil(carOn);
+        updateControls();
+        updateBars();
+    }
+
+    public void stopThread() {
+        appOn = false;
+    }
+
+    public void refillFuel() {
+        computer.getFuel().setFuelAmount(FuelLevelSensor.maxFuelAmount);
+    }
+
+    public void refillOil() {
+        computer.getOilLevel().setCurrentAmount(OilLevelSensor.maximum);
+    }
+
+    public void refillAccumulator() {
+        computer.getAccumulator().setCurrentLoad(AccumulatorLoadSensor.maxLoad);
+    }
 }

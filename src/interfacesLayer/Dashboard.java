@@ -1,10 +1,12 @@
 package interfacesLayer;
 
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import logicLayer.StackPaneController.Controller;
 
 import java.io.IOException;
 
@@ -17,9 +19,10 @@ public class Dashboard extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
 
-        Parent root = FXMLLoader.load(getClass().getResource("sample.fxml"));
-        primaryStage.setTitle("Scenic Dashboard");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
+        Parent root = loader.load();
 
+        primaryStage.setTitle("Scenic Dashboard");
         Scene scene = new Scene(root);
 
 
@@ -34,5 +37,9 @@ public class Dashboard extends Application {
 
         primaryStage.show();
 
+        primaryStage.setOnCloseRequest(event -> {
+            Controller controller = (Controller) loader.getController();
+            controller.stopThread();
+        });
     }
 }

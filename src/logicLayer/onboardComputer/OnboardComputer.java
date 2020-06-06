@@ -11,6 +11,8 @@ import logicLayer.sensors.OilLevelSensor;
 import logicLayer.sensors.OilTemperatureSensor;
 import logicLayer.velocity.Velocity;
 
+import javax.swing.*;
+
 public class OnboardComputer {
     // Initializing Ligts
     private LowBeam lowBeam;
@@ -33,6 +35,7 @@ public class OnboardComputer {
 
 
     public OnboardComputer() {
+
         // Initializing Ligts
         lowBeam = new LowBeam();
         highBeam = new FullBeam();
@@ -45,7 +48,7 @@ public class OnboardComputer {
 
         // Initializing sensors
         accumulator = new AccumulatorLoadSensor();
-        oilLevel = new OilLevelSensor(3.8);
+        oilLevel = new OilLevelSensor();
         oilTemperature = new OilTemperatureSensor(20.0);
         fuel = new FuelLevelSensor();
 
@@ -85,9 +88,43 @@ public class OnboardComputer {
         return fuel;
     }
 
-    public double fuelConsumption() {
-        double consumed = velocity.getCurrentVelocity()/7200 * FuelLevelSensor.fuelPerOneKm;
+    public AccumulatorLoadSensor getAccumulator() {
+        return accumulator;
+    }
+
+    public OilLevelSensor getOilLevel() {
+        return oilLevel;
+    }
+
+    public OilTemperatureSensor getOilTemperature() {
+        return oilTemperature;
+    }
+
+    public double fuelConsumption(boolean revs) {
+        double consumed;
+        if ( (getVelocity().getCurrentVelocity() <= 60) && revs) {
+            consumed = FuelLevelSensor.fuelPerOneKm;
+        } else if ( (getVelocity().getCurrentVelocity() > 60 && getVelocity().getCurrentVelocity() <= 90) && revs ) {
+            consumed = FuelLevelSensor.fuelPerOneKm*7/10;
+        } else if ( (getVelocity().getCurrentVelocity() > 90) && revs) {
+            consumed= FuelLevelSensor.fuelPerOneKm;
+        } else if (getVelocity().getCurrentVelocity() == 0 && !revs ) {
+            consumed = 0;
+        }
+        else consumed = FuelLevelSensor.fuelPerOneKm/6;
+
         fuel.setFuelAmount(fuel.getValue()-consumed);
-        return consumed*7200;
+        return consumed*100;
+    }
+
+    public void updateAccumulatorStatus(boolean isOn) {
+        if (isOn && (getAccumulator().getValue() < AccumulatorLoadSensor.maxLoad) ) getAccumulator().setCurrentLoad(getAccumulator().getValue()+0.1);
+        else if (!isOn && (getTurnSignals().getRightLight().isOn() || getTurnSignals().getLeftLight().isOn() || getLowBeam().isOn() || getHighBeam().isOn())) {
+            getAccumulator().setCurrentLoad(getAccumulator().getValue()-0.1);
+        }
+    }
+
+    public void updateOil(boolean isOn) {
+        if (isOn && (getVelocity().getCurrentVelocity() > 0) ) getOilLevel().setCurrentAmount(getOilLevel().getValue()-0.005);
     }
 }
