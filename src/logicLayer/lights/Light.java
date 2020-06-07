@@ -13,4 +13,12 @@ public class Light {
         isOn = !isOn;
     }
 
+    public void switchOn() {
+        isOn = true;
+    }
+
+    public void switchOff() {
+        isOn = false;
+    }
+
 }

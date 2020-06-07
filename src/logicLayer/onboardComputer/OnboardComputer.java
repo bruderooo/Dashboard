@@ -1,8 +1,6 @@
 package logicLayer.onboardComputer;
 
-import logicLayer.lights.FullBeam;
-import logicLayer.lights.LowBeam;
-import logicLayer.lights.TurnSignal;
+import logicLayer.lights.*;
 import logicLayer.mirrors.RearViewMirror;
 import logicLayer.mirrors.WingMirror;
 import logicLayer.sensors.AccumulatorLoadSensor;
@@ -11,13 +9,14 @@ import logicLayer.sensors.OilLevelSensor;
 import logicLayer.sensors.OilTemperatureSensor;
 import logicLayer.velocity.Velocity;
 
-import javax.swing.*;
-
 public class OnboardComputer {
     // Initializing Ligts
     private LowBeam lowBeam;
     private FullBeam highBeam;
     private TurnSignal turnSignals;
+    private FogLightsBack fogLightsBack;
+    private FogLightsFront fogLightsFront;
+    private PositionLights positionLights;
 
     // Initializing mirrors
     private WingMirror wingMirrorLeft;
@@ -40,6 +39,9 @@ public class OnboardComputer {
         lowBeam = new LowBeam();
         highBeam = new FullBeam();
         turnSignals = new TurnSignal();
+        fogLightsBack = new FogLightsBack();
+        fogLightsFront = new FogLightsFront();
+        positionLights = new PositionLights();
 
         // Initializing mirrors
         wingMirrorLeft = new WingMirror();
@@ -96,8 +98,16 @@ public class OnboardComputer {
         return oilLevel;
     }
 
-    public OilTemperatureSensor getOilTemperature() {
-        return oilTemperature;
+    public FogLightsBack getFogLightsBack() {
+        return fogLightsBack;
+    }
+
+    public FogLightsFront getFogLightsFront() {
+        return fogLightsFront;
+    }
+
+    public PositionLights getPositionLights() {
+        return positionLights;
     }
 
     public double fuelConsumption(boolean revs) {
@@ -116,12 +126,29 @@ public class OnboardComputer {
 
     public void updateAccumulatorStatus(boolean isOn) {
         if (isOn && (getAccumulator().getValue() < AccumulatorLoadSensor.maxLoad) ) getAccumulator().setCurrentLoad(getAccumulator().getValue()+0.5);
-        else if (!isOn && (getTurnSignals().getRightLight().isOn() || getTurnSignals().getLeftLight().isOn() || getLowBeam().isOn() || getHighBeam().isOn()) && accumulator.getValue() > 0) {
+        else if (!isOn && (getTurnSignals().getRightLight().isOn() || getTurnSignals().getLeftLight().isOn() || getLowBeam().isOn() || getHighBeam().isOn() ||
+                getPositionLights().isOn() || getFogLightsFront().isOn() || getFogLightsBack().isOn() ) && accumulator.getValue() > 0) {
             getAccumulator().setCurrentLoad(getAccumulator().getValue()-0.5);
         }
     }
 
     public void updateOil(boolean isOn) {
         if (isOn && (getVelocity().getCurrentVelocity() > 0) && oilLevel.getValue() > 0) getOilLevel().setCurrentAmount(getOilLevel().getValue()-0.02);
+    }
+
+    public void setGroupLights(boolean position, boolean low, boolean full) {
+        if ( position) {
+            getHighBeam().switchOff();
+            getLowBeam().switchOff();
+            getPositionLights().switchLight();
+        } else if (low) {
+            getPositionLights().switchOff();
+            getHighBeam().switchOff();
+            getLowBeam().switchLight();
+        } else if (full) {
+            getPositionLights().switchOff();
+            getLowBeam().switchOff();
+            getHighBeam().switchLight();
+        }
     }
 }

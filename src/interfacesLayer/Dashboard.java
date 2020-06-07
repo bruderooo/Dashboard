@@ -25,15 +25,11 @@ public class Dashboard extends Application {
         primaryStage.setTitle("Scenic Dashboard");
         Scene scene = new Scene(root);
 
-
-
         // stage settings
         primaryStage.setScene(scene);
         primaryStage.setHeight(720);
         primaryStage.setWidth(1280);
         primaryStage.setResizable(false);
-
-
 
         primaryStage.show();
 

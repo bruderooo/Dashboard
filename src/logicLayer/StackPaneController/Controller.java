@@ -1,8 +1,10 @@
 package logicLayer.StackPaneController;
 
+import interfacesLayer.Info;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -28,7 +30,7 @@ public class Controller {
 
     @FXML
     public ToggleButton lowBeam, fullBeam, mirrorsButton;
-    public ToggleGroup lowFullBeamsGroup = new ToggleGroup();
+    public ToggleGroup lightsGroup = new ToggleGroup();
     public Button startButton, leftBlinker, rightBlinker;
     public Label clock, velocity;
     public Pane pane;
@@ -43,39 +45,6 @@ public class Controller {
     private Timeline clockTimeline, leftBlinkerTimeline, rightBlinkerTimeline, velocityTimeline;
     private DecimalFormat dec = new DecimalFormat("#0.0");
 
-
-    @FXML
-    public void lowBeamAction(){
-        updateLowFullBeams();
-    }
-
-    public void fullBeamAction() {
-        updateLowFullBeams();
-    }
-
-    public void startEngine() {
-        if (!carOn && computer.getAccumulator().getValue() > 0 && computer.getOilLevel().getValue() > 0) {
-            carOn = true;
-
-            updateFuelBar();
-            clockON();
-            velocityMeterON();
-
-
-        } else {
-            carOn = false;
-            updateFuelBar();
-            clockOFF();
-            velocityMeterOFF();
-            // wylaczanie samochodu
-
-            fadeOilControls();
-            fadeAccControls();
-            accImg0.setOpacity(100);
-            oilImg0.setOpacity(100);
-        }
-    }
-
     @FXML
     public void initialize() {
         computer = new OnboardComputer();
@@ -87,7 +56,6 @@ public class Controller {
                     e.printStackTrace();
                 }
                 updateSensors();
-                System.out.println(computer.getAccumulator().getValue());
             }
 
         });
@@ -144,10 +112,53 @@ public class Controller {
 
     }
 
+    public void lowBeamAction(){
+        updateLowFullBeams(false, true, false);
+    }
+
+    public void fullBeamAction() {
+        updateLowFullBeams(false, false, true);
+    }
+
+    public void positionLightsAction() {
+        updateLowFullBeams(true, false, false);
+    }
+
+    public void fogLightsBackAction() {
+        computer.getFogLightsBack().switchLight();
+    }
+
+    public void fogLightsFrontAction() {
+        computer.getFogLightsFront().switchLight();
+    }
+
+    public void startEngine() {
+        if (!carOn && computer.getAccumulator().getValue() > 0 && computer.getOilLevel().getValue() > 0) {
+            carOn = true;
+
+            updateFuelBar();
+            clockON();
+            velocityMeterON();
+
+
+        } else {
+            carOn = false;
+            updateFuelBar();
+            clockOFF();
+            velocityMeterOFF();
+            // wylaczanie samochodu
+
+            fadeOilControls();
+            fadeAccControls();
+            accImg0.setOpacity(100);
+            oilImg0.setOpacity(100);
+        }
+    }
+
     private void velocityMeterON() {
         velocityTimeline = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             velocity.setText( dec.format(computer.getVelocity().getCurrentVelocity()) + " km/h");
-            fuelConsumptionLabel.setText(dec.format(computer.fuelConsumption(speedingUp )) + "L/100KM");
+            fuelConsumptionLabel.setText(dec.format(computer.fuelConsumption(speedingUp )) + " L/100KM");
         }), new KeyFrame(Duration.millis(500)));
         velocityTimeline.setCycleCount(Animation.INDEFINITE);
         velocityTimeline.play();
@@ -172,13 +183,8 @@ public class Controller {
         clock.setText("00:00:00");
     }
 
-    private void updateLowFullBeams() {
-        if (computer.getHighBeam().isOn() != fullBeam.isSelected()) {
-            computer.getHighBeam().switchLight();
-        }
-        if (computer.getLowBeam().isOn() != lowBeam.isSelected()) {
-            computer.getLowBeam().switchLight();
-        }
+    private void updateLowFullBeams(boolean position, boolean low, boolean full) {
+        computer.setGroupLights(position, low, full);
     }
 
     public void rightBlinkerPress() {
@@ -350,4 +356,13 @@ public class Controller {
     public void refillAccumulator() {
         computer.getAccumulator().setCurrentLoad(AccumulatorLoadSensor.maxLoad);
     }
+
+    public void menuInformationsInstructions(ActionEvent actionEvent) {
+        Info.displayProgramInfo("Instrukcja aplikacji");
+    }
+
+    public void menuInformationsAboutVehicle(ActionEvent actionEvent) {
+        Info.displayAutoInfo("Informacje o samochodzie");
+    }
+
 }

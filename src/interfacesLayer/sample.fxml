@@ -10,11 +10,11 @@
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
-
 
 <VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logicLayer.StackPaneController.Controller">
    <children>
@@ -24,14 +24,20 @@
             <items>
               <MenuItem mnemonicParsing="false" onAction="#refillFuel" text="Zbiornik paliwa" />
                   <MenuItem mnemonicParsing="false" onAction="#refillOil" text="Olej" />
-                  <MenuItem mnemonicParsing="false" onAction="#refillAccumulator"  text="Naładuj akumulator" />
+                  <MenuItem mnemonicParsing="false" onAction="#refillAccumulator" text="Naładuj akumulator" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Trasy">
             <items>
-              <MenuItem mnemonicParsing="false" text="TODO" />
+              <MenuItem mnemonicParsing="false" text="Placeholder" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Informacje">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#menuInformationsInstructions" text="Instrukcja" />
+                  <MenuItem mnemonicParsing="false" onAction="#menuInformationsAboutVehicle" text="O pojeździe" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
       <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" onKeyReleased="#handleKeyReleased" prefHeight="720.0" prefWidth="1280.0" styleClass="bodybg" stylesheets="@style.css">
@@ -41,12 +47,12 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <ToggleButton fx:id="lowBeam" layoutX="606.0" layoutY="163.0" mnemonicParsing="false" onAction="#lowBeamAction" scaleX="0.3" scaleY="0.3" styleClass="lowBeam">
+            <ToggleButton fx:id="lowBeam" layoutX="657.0" layoutY="163.0" mnemonicParsing="false" onAction="#lowBeamAction" scaleX="0.3" scaleY="0.3" styleClass="lowBeam">
                <toggleGroup>
-                  <ToggleGroup fx:id="lowFullBeamsGroup" />
+                  <ToggleGroup fx:id="lightsGroup" />
                </toggleGroup>
             </ToggleButton>
-            <ToggleButton fx:id="fullBeam" layoutX="656.0" layoutY="169.0" mnemonicParsing="false" onAction="#fullBeamAction" scaleX="0.3" scaleY="0.3" styleClass="fullBeam" toggleGroup="$lowFullBeamsGroup" />
+            <ToggleButton fx:id="fullBeam" layoutX="712.0" layoutY="169.0" mnemonicParsing="false" onAction="#fullBeamAction" scaleX="0.3" scaleY="0.3" styleClass="fullBeam" toggleGroup="$lightsGroup" />
             <Button fx:id="startButton" layoutX="582.0" layoutY="345.0" mnemonicParsing="false" onAction="#startEngine" styleClass="startButton" text="Start" textAlignment="CENTER">
                <font>
                   <Font name="System Bold" size="12.0" />
@@ -57,8 +63,8 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button fx:id="leftBlinker" layoutX="620.0" layoutY="191.0" mnemonicParsing="false" onAction="#leftBlinkerPress" scaleX="2.0" styleClass="blinker" />
-            <Button fx:id="rightBlinker" layoutX="767.0" layoutY="191.0" mnemonicParsing="false" onAction="#rightBlinkerPress" rotate="180.0" scaleX="2.0" styleClass="blinker" />
+            <Button fx:id="leftBlinker" layoutX="910.0" layoutY="230.0" mnemonicParsing="false" onAction="#leftBlinkerPress" scaleX="2.0" styleClass="blinker" />
+            <Button fx:id="rightBlinker" layoutX="953.0" layoutY="230.0" mnemonicParsing="false" onAction="#rightBlinkerPress" rotate="180.0" scaleX="2.0" styleClass="blinker" />
             <ToggleButton fx:id="mirrorsButton" layoutX="167.0" layoutY="271.0" mnemonicParsing="false" onAction="#mirrorsButtonAction" prefHeight="46.0" prefWidth="86.0" styleClass="mirrorsButton" text="mirrors">
                <font>
                   <Font name="System Bold" size="14.0" />
@@ -93,7 +99,10 @@
                   <Rectangle fx:id="fuelRect0" arcHeight="5.0" arcWidth="5.0" fill="#616160" height="8.0" stroke="BLACK" strokeType="INSIDE" width="16.0" />
                </children>
             </VBox>
-            <Label fx:id="fuelConsumptionLabel" layoutX="705.0" layoutY="352.0" text="0.0 L/100KM" />
+            <Label fx:id="fuelConsumptionLabel" layoutX="705.0" layoutY="352.0" text="0.0 L/100KM">
+               <font>
+                  <Font size="14.0" />
+               </font></Label>
             <ImageView fx:id="accImg2" fitHeight="27.0" fitWidth="49.0" layoutX="350.0" layoutY="362.0">
                <image>
                   <Image url="@../images/aku2.png" />
@@ -124,6 +133,48 @@
                   <Image url="@../images/olej2.png" />
                </image>
             </ImageView>
+            <ToggleButton layoutX="607.0" layoutY="167.0" minWidth="42.0" mnemonicParsing="false" onAction="#positionLightsAction" prefHeight="74.0" prefWidth="132.0" scaleX="0.35" scaleY="0.35" styleClass="positionLight" toggleGroup="$lightsGroup" />
+            <ToggleButton layoutX="572.0" layoutY="158.0" minHeight="20.0" minWidth="30.0" mnemonicParsing="false" onAction="#fogLightsBackAction" prefHeight="92.0" prefWidth="113.0" scaleX="0.3" scaleY="0.3" styleClass="fogLightBack" />
+            <ToggleButton layoutX="532.0" layoutY="158.0" minWidth="41.0" mnemonicParsing="false" onAction="#fogLightsFrontAction" prefHeight="92.0" prefWidth="113.0" scaleX="0.3" scaleY="0.3" styleClass="fogLightFront" />
+            <VBox layoutX="809.0" layoutY="324.0" prefHeight="149.0" prefWidth="200.0">
+               <children>
+                  <Label alignment="CENTER" prefHeight="33.0" prefWidth="200.0" text="Przebiegi">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <HBox prefHeight="37.0" prefWidth="163.0">
+                     <children>
+                        <Label prefHeight="36.0" prefWidth="100.0" text="Całkowity:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="100.0" text="0.0 KM" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="37.0" prefWidth="163.0">
+                     <children>
+                        <Label prefHeight="36.0" prefWidth="100.0" text="Dzienny:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="100.0" text="0.0 KM" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="37.0" prefWidth="163.0">
+                     <children>
+                        <Label prefHeight="36.0" prefWidth="100.0" text="Użytkownika:">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="100.0" text="0.0 KM" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
          </children>
       </Pane>
    </children>

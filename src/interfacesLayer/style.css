@@ -19,6 +19,30 @@
     -fx-graphic: url('../images/dlugieSwiatla.png');
 }
 
+.fogLightFront {
+    -fx-graphic: url('../images/przeciwPrzodOff.png');
+}
+
+.fogLightFront:selected {
+    -fx-graphic: url('../images/przeciwPrzod.png');
+}
+
+.fogLightBack {
+    -fx-graphic: url('../images/przeciwTylOff.png');
+}
+
+.fogLightBack:selected {
+    -fx-graphic: url('../images/przeciwTyl.png');
+}
+
+.positionLight {
+    -fx-graphic: url('../images/pozycyjneOff.png');
+}
+
+.positionLight:selected {
+    -fx-graphic: url('../images/pozycyjne.png');
+}
+
 .fuel {
     -fx-graphic: url('../images/fuel.png');
 }
