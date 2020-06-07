@@ -1,41 +1,43 @@
 package logicLayer.Route;
 
+import dataLayer.ConnectToSQL;
+
+import java.sql.SQLException;
 import java.time.Duration;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public class Route {
 
     private Duration duration;
+    private final LocalDateTime startDate;
+    private LocalDateTime endDate;
     private float routeLength;
-    private final LocalTime startDate;
-    private LocalTime endDate;
 
-    public Route(LocalTime startDate) {
+    public Route() {
+        this.startDate = LocalDateTime.now();
+    }
+
+    public Route(float routeLength, LocalDateTime startDate, LocalDateTime endDate) {
+        this.routeLength = routeLength;
         this.startDate = startDate;
-    }
-
-    public void setRouteLength(float route_length) {
-        this.routeLength = route_length;
-    }
-
-    public void setEndDate(LocalTime endDate) {
         this.endDate = endDate;
-        this.duration = Duration.between(endDate, this.startDate);
+        this.duration = Duration.between(endDate, startDate);
     }
 
-    public Duration getDuration() {
-        return duration;
+    public void endRoute(float routeLength, ConnectToSQL connectToSQL) throws SQLException {
+        if (this.endDate == null) {
+            this.routeLength = routeLength;
+            this.endDate = LocalDateTime.now();
+            this.duration = Duration.between(endDate, this.startDate);
+            connectToSQL.addRoute(routeLength, this.startDate, this.endDate);
+        }
     }
 
-    public float getRouteLength() {
-        return routeLength;
-    }
-
-    public LocalTime getStartDate() {
+    public LocalDateTime getStartDate() {
         return startDate;
     }
 
-    public LocalTime getEndDate() {
+    public LocalDateTime getEndDate() {
         return endDate;
     }
 }

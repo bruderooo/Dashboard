@@ -46,7 +46,7 @@ public class OnboardComputer {
         // Initializing mirrors
         wingMirrorLeft = new WingMirror();
         wingMirrorRight = new WingMirror();
-         rearViewMirror = new RearViewMirror();
+        rearViewMirror = new RearViewMirror();
 
         // Initializing sensors
         accumulator = new AccumulatorLoadSensor();
