@@ -102,29 +102,26 @@ public class OnboardComputer {
 
     public double fuelConsumption(boolean revs) {
         double consumed;
-        if ( (getVelocity().getCurrentVelocity() <= 60) && revs) {
-            consumed = FuelLevelSensor.fuelPerOneKm;
-        } else if ( (getVelocity().getCurrentVelocity() > 60 && getVelocity().getCurrentVelocity() <= 90) && revs ) {
-            consumed = FuelLevelSensor.fuelPerOneKm*7/10;
-        } else if ( (getVelocity().getCurrentVelocity() > 90) && revs) {
-            consumed= FuelLevelSensor.fuelPerOneKm;
-        } else if (getVelocity().getCurrentVelocity() == 0 && !revs ) {
-            consumed = 0;
-        }
-        else consumed = FuelLevelSensor.fuelPerOneKm/6;
+        if (revs) {
+            consumed = 0.7*FuelLevelSensor.fuelPerOneKm/Velocity.maxVelocity * getVelocity().getCurrentVelocity() + FuelLevelSensor.fuelPerOneKm*3/10;
+        } else if (velocity.getCurrentVelocity() > 0.0) {
+            consumed = (0.9 + Math.random()*0.4) /100;
+        } else consumed = 0;
+
+
 
         fuel.setFuelAmount(fuel.getValue()-consumed);
         return consumed*100;
     }
 
     public void updateAccumulatorStatus(boolean isOn) {
-        if (isOn && (getAccumulator().getValue() < AccumulatorLoadSensor.maxLoad) ) getAccumulator().setCurrentLoad(getAccumulator().getValue()+0.1);
-        else if (!isOn && (getTurnSignals().getRightLight().isOn() || getTurnSignals().getLeftLight().isOn() || getLowBeam().isOn() || getHighBeam().isOn())) {
-            getAccumulator().setCurrentLoad(getAccumulator().getValue()-0.1);
+        if (isOn && (getAccumulator().getValue() < AccumulatorLoadSensor.maxLoad) ) getAccumulator().setCurrentLoad(getAccumulator().getValue()+0.5);
+        else if (!isOn && (getTurnSignals().getRightLight().isOn() || getTurnSignals().getLeftLight().isOn() || getLowBeam().isOn() || getHighBeam().isOn()) && accumulator.getValue() > 0) {
+            getAccumulator().setCurrentLoad(getAccumulator().getValue()-0.5);
         }
     }
 
     public void updateOil(boolean isOn) {
-        if (isOn && (getVelocity().getCurrentVelocity() > 0) ) getOilLevel().setCurrentAmount(getOilLevel().getValue()-0.005);
+        if (isOn && (getVelocity().getCurrentVelocity() > 0) && oilLevel.getValue() > 0) getOilLevel().setCurrentAmount(getOilLevel().getValue()-0.02);
     }
 }

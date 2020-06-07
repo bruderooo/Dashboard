@@ -1,6 +1,5 @@
 package logicLayer.StackPaneController;
 
-
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -55,7 +54,7 @@ public class Controller {
     }
 
     public void startEngine() {
-        if (!carOn) {
+        if (!carOn && computer.getAccumulator().getValue() > 0 && computer.getOilLevel().getValue() > 0) {
             carOn = true;
 
             updateFuelBar();
@@ -88,6 +87,7 @@ public class Controller {
                     e.printStackTrace();
                 }
                 updateSensors();
+                System.out.println(computer.getAccumulator().getValue());
             }
 
         });
@@ -147,7 +147,7 @@ public class Controller {
     private void velocityMeterON() {
         velocityTimeline = new Timeline(new KeyFrame(Duration.ZERO, e -> {
             velocity.setText( dec.format(computer.getVelocity().getCurrentVelocity()) + " km/h");
-            fuelConsumptionLabel.setText(dec.format(computer.fuelConsumption(speedingUp || slowingDown)) + "L/100KM");
+            fuelConsumptionLabel.setText(dec.format(computer.fuelConsumption(speedingUp )) + "L/100KM");
         }), new KeyFrame(Duration.millis(500)));
         velocityTimeline.setCycleCount(Animation.INDEFINITE);
         velocityTimeline.play();
@@ -227,10 +227,10 @@ public class Controller {
         if (keyEvent.getCode() == KeyCode.DOWN || keyEvent.getCode() == KeyCode.S) {
             slowingDown = false;
         }
-        if (keyEvent.getCode() == KeyCode.RIGHT) {
+        if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.D) {
             rightBlinkerPress();
         }
-        if (keyEvent.getCode() == KeyCode.LEFT) {
+        if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.A) {
             leftBlinkerPress();
         }
     }
@@ -330,6 +330,9 @@ public class Controller {
         computer.updateOil(carOn);
         updateControls();
         updateBars();
+        if (computer.getFuel().getValue() <= 0) {
+            startEngine();
+        }
     }
 
     public void stopThread() {
