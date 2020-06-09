@@ -11,13 +11,13 @@ public class Route {
     private Duration duration;
     private final LocalDateTime startDate;
     private LocalDateTime endDate;
-    private float routeLength;
+    private double routeLength;
 
     public Route() {
         this.startDate = LocalDateTime.now();
     }
 
-    public Route(float routeLength, LocalDateTime startDate, LocalDateTime endDate) {
+    public Route(double routeLength, LocalDateTime startDate, LocalDateTime endDate) {
         this.routeLength = routeLength;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -31,6 +31,17 @@ public class Route {
             this.duration = Duration.between(endDate, this.startDate);
             connectToSQL.addRoute(routeLength, this.startDate, this.endDate);
         }
+    }
+
+    public void endRoute() {
+        if (this.endDate == null) {
+            this.endDate = LocalDateTime.now();
+            this.duration = Duration.between(endDate, this.startDate);
+        }
+    }
+
+    public void setRouteLength(double routeLength) {
+        this.routeLength = routeLength;
     }
 
     public LocalDateTime getStartDate() {

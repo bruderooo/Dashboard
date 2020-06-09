@@ -1,5 +1,6 @@
 package logicLayer.StackPaneController;
 
+import dataLayer.SerializationXML;
 import interfacesLayer.Info;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
@@ -21,6 +22,8 @@ import logicLayer.sensors.AccumulatorLoadSensor;
 import logicLayer.sensors.FuelLevelSensor;
 import logicLayer.sensors.OilLevelSensor;
 import logicLayer.sensors.Sensor;
+
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +32,7 @@ import java.time.format.DateTimeFormatter;
 public class Controller {
 
     @FXML
-    public ToggleButton lowBeam, fullBeam, mirrorsButton;
+    public ToggleButton lowBeam, fullBeam, mirrorsButton, positionLights, fogLightsBack, fogLightsFront;
     public ToggleGroup lightsGroup = new ToggleGroup();
     public Button startButton, leftBlinker, rightBlinker;
     public Label clock, velocity;
@@ -48,6 +51,10 @@ public class Controller {
     @FXML
     public void initialize() {
         computer = new OnboardComputer();
+
+        // Read data from file about fuel, accumulator, oil
+        SerializationXML.readComputerData(computer);
+
         Thread updatingThread = new Thread( () -> {
             while (appOn) {
                 try {
@@ -80,9 +87,6 @@ public class Controller {
         mirrorsButton.setText("Rozłóż\nLusterka");
         mirrorsButton.setAlignment(Pos.CENTER);
 
-        // fill fuel level
-        computer.getFuel().setFuelAmount(FuelLevelSensor.maxFuelAmount*71/80);
-
         // color and position in of values in clock and velocity meter
         clock.setBackground(new Background(new BackgroundFill(Color.rgb(150,150,150), CornerRadii.EMPTY, Insets.EMPTY)));
         clock.setAlignment(Pos.CENTER_RIGHT);
@@ -92,12 +96,16 @@ public class Controller {
 
         // making it so "focus" can not traverse between buttons
         lowBeam.setFocusTraversable(false);
+        fogLightsBack.setFocusTraversable(false);
+        fogLightsBack.setFocusTraversable(false);
+        positionLights.setFocusTraversable(false);
         fullBeam.setFocusTraversable(false);
         startButton.setFocusTraversable(false);
         velocity.setFocusTraversable(false);
         leftBlinker.setFocusTraversable(false);
         rightBlinker.setFocusTraversable(false);
         mirrorsButton.setFocusTraversable(false);
+
 
         // clock is left traversable so that there is focus on the main pane so that we can handle KeyPress and KeyRelease but it doesnt affect clock label
         clock.setFocusTraversable(true);
@@ -241,7 +249,7 @@ public class Controller {
         }
     }
 
-    public void mirrorsButtonAction() {
+    public void mirrorsButtonAction() throws IOException {
         if (mirrorsButton.isSelected()){
             computer.getRearViewMirror().openMirror();
             computer.getWingMirrorLeft().openMirror();
@@ -363,6 +371,10 @@ public class Controller {
 
     public void menuInformationsAboutVehicle(ActionEvent actionEvent) {
         Info.displayAutoInfo("Informacje o samochodzie");
+    }
+
+    public void writeComputerData() throws IOException {
+        SerializationXML.writeComputerData(computer);
     }
 
 }

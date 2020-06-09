@@ -35,6 +35,11 @@ public class Dashboard extends Application {
 
         primaryStage.setOnCloseRequest(event -> {
             Controller controller = (Controller) loader.getController();
+            try {
+                controller.writeComputerData();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             controller.stopThread();
         });
     }

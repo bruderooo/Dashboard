@@ -1,5 +1,6 @@
 package logicLayer.onboardComputer;
 
+import logicLayer.Route.Route;
 import logicLayer.lights.*;
 import logicLayer.mirrors.RearViewMirror;
 import logicLayer.mirrors.WingMirror;
@@ -9,7 +10,7 @@ import logicLayer.sensors.OilLevelSensor;
 import logicLayer.sensors.OilTemperatureSensor;
 import logicLayer.velocity.Velocity;
 
-public class OnboardComputer {
+public class OnboardComputer implements Cloneable {
     // Initializing Ligts
     private LowBeam lowBeam;
     private FullBeam highBeam;
@@ -28,6 +29,11 @@ public class OnboardComputer {
     private OilLevelSensor oilLevel;
     private OilTemperatureSensor oilTemperature;
     private FuelLevelSensor fuel;
+
+    // Mileage
+    private Route totalMileage;
+    private Route dailyMileage;
+    private Route userMileage;
 
     // Initializing velocity
     private Velocity velocity;
@@ -53,6 +59,13 @@ public class OnboardComputer {
         oilLevel = new OilLevelSensor();
         oilTemperature = new OilTemperatureSensor(20.0);
         fuel = new FuelLevelSensor();
+
+        // Mileage
+        totalMileage = new Route();
+        dailyMileage = new Route();
+        userMileage = new Route();
+
+        totalMileage.setRouteLength(20.1);
 
         // Initializing velocity
         velocity = new Velocity();
@@ -104,6 +117,18 @@ public class OnboardComputer {
 
     public FogLightsFront getFogLightsFront() {
         return fogLightsFront;
+    }
+
+    public Route getTotalMileage() {
+        return totalMileage;
+    }
+
+    public Route getDailyMileage() {
+        return dailyMileage;
+    }
+
+    public Route getUserMileage() {
+        return userMileage;
     }
 
     public PositionLights getPositionLights() {

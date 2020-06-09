@@ -133,9 +133,9 @@
                   <Image url="@../images/olej2.png" />
                </image>
             </ImageView>
-            <ToggleButton layoutX="607.0" layoutY="167.0" minWidth="42.0" mnemonicParsing="false" onAction="#positionLightsAction" prefHeight="74.0" prefWidth="132.0" scaleX="0.35" scaleY="0.35" styleClass="positionLight" toggleGroup="$lightsGroup" />
-            <ToggleButton layoutX="572.0" layoutY="158.0" minHeight="20.0" minWidth="30.0" mnemonicParsing="false" onAction="#fogLightsBackAction" prefHeight="92.0" prefWidth="113.0" scaleX="0.3" scaleY="0.3" styleClass="fogLightBack" />
-            <ToggleButton layoutX="532.0" layoutY="158.0" minWidth="41.0" mnemonicParsing="false" onAction="#fogLightsFrontAction" prefHeight="92.0" prefWidth="113.0" scaleX="0.3" scaleY="0.3" styleClass="fogLightFront" />
+            <ToggleButton fx:id="positionLights" layoutX="607.0" layoutY="167.0" minWidth="42.0" mnemonicParsing="false" onAction="#positionLightsAction" prefHeight="74.0" prefWidth="132.0" scaleX="0.35" scaleY="0.35" styleClass="positionLight" toggleGroup="$lightsGroup" />
+            <ToggleButton fx:id="fogLightsBack" layoutX="572.0" layoutY="158.0" minHeight="20.0" minWidth="30.0" mnemonicParsing="false" onAction="#fogLightsBackAction" prefHeight="92.0" prefWidth="113.0" scaleX="0.3" scaleY="0.3" styleClass="fogLightBack" />
+            <ToggleButton fx:id="fogLightsFront" layoutX="532.0" layoutY="158.0" minWidth="41.0" mnemonicParsing="false" onAction="#fogLightsFrontAction" prefHeight="92.0" prefWidth="113.0" scaleX="0.3" scaleY="0.3" styleClass="fogLightFront" />
             <VBox layoutX="809.0" layoutY="324.0" prefHeight="149.0" prefWidth="200.0">
                <children>
                   <Label alignment="CENTER" prefHeight="33.0" prefWidth="200.0" text="Przebiegi">
