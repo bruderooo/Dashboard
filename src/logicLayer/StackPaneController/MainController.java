@@ -1,13 +1,17 @@
 package logicLayer.StackPaneController;
 
+import dataLayer.ConnectToSQL;
 import dataLayer.SerializationXML;
-import interfacesLayer.Info;
+import interfacesLayer.MenuWindows;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -15,54 +19,75 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.fxml.FXML;
+import logicLayer.Route.Route;
 import logicLayer.onboardComputer.OnboardComputer;
 import logicLayer.sensors.AccumulatorLoadSensor;
 import logicLayer.sensors.FuelLevelSensor;
 import logicLayer.sensors.OilLevelSensor;
 import logicLayer.sensors.Sensor;
-
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 
-public class Controller {
+public class MainController {
 
     @FXML
-    public ToggleButton lowBeam, fullBeam, mirrorsButton, positionLights, fogLightsBack, fogLightsFront;
+    public ToggleButton lowBeam, fullBeam, mirrorsButton, positionLights, fogLightsBack, fogLightsFront, cruiseControllButton;
     public ToggleGroup lightsGroup = new ToggleGroup();
-    public Button startButton, leftBlinker, rightBlinker;
-    public Label clock, velocity;
+    public Button startButton, leftBlinker, rightBlinker, userKilometrageResetButton;
+    public Label clock, velocity, fuelConsumptionLabel, totalKilometrage, dailyKilometrage, usersKilometrage;
     public Pane pane;
     public ProgressBar accumulatorBar, oilBar;
     public Rectangle fuelRect0, fuelRect1, fuelRect2, fuelRect3, fuelRect4, fuelRect5, fuelRect6, fuelRect7;
     public VBox fuelBar;
-    public Label fuelConsumptionLabel;
     public ImageView accImg0,accImg1,accImg2,oilImg0, oilImg1,oilImg2;
 
-    private boolean carOn, appOn = true, speedingUp = false, slowingDown = false;
+
+    private boolean carOn, appOn = true, speedingUp = false, slowingDown = false, cruiseControll = false;
     private OnboardComputer computer;
-    private Timeline clockTimeline, leftBlinkerTimeline, rightBlinkerTimeline, velocityTimeline;
+    private Timeline clockTimeline, leftBlinkerTimeline, rightBlinkerTimeline, velocityTimeline, kilometrageTimeline;
     private DecimalFormat dec = new DecimalFormat("#0.0");
+    private ConnectToSQL sql;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws SQLException {
         computer = new OnboardComputer();
+        sql = new ConnectToSQL();
+        sql.getAllRoutes(computer.getRoutes());
+
 
         // Read data from file about fuel, accumulator, oil
         SerializationXML.readComputerData(computer);
 
+
+
         Thread updatingThread = new Thread( () -> {
+            int counter = 0;
             while (appOn) {
                 try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                counter++;
+                // Once evety minute it saves computer data to xml
+                if (counter%120 == 0) {
+                    counter = 0;
+                    try {
+                        writeComputerData();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
                 updateSensors();
+                computer.updateKilometrage();
             }
 
         });
@@ -105,6 +130,8 @@ public class Controller {
         leftBlinker.setFocusTraversable(false);
         rightBlinker.setFocusTraversable(false);
         mirrorsButton.setFocusTraversable(false);
+        cruiseControllButton.setFocusTraversable(false);
+        userKilometrageResetButton.setFocusTraversable(false);
 
 
         // clock is left traversable so that there is focus on the main pane so that we can handle KeyPress and KeyRelease but it doesnt affect clock label
@@ -117,6 +144,13 @@ public class Controller {
         rightBlinkerTimeline = new Timeline(new KeyFrame(Duration.millis(600), e -> rightBlinker.setStyle("-fx-background-color: #00db08")),
                 new KeyFrame(Duration.millis(1200), e -> rightBlinker.setStyle("-fx-background-color: #000000")));
         rightBlinkerTimeline.setCycleCount(Animation.INDEFINITE);
+
+        kilometrageTimeline = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            totalKilometrage.setText(dec.format(computer.getTotalKilometrage().getRouteLength()) + " KM" );
+            dailyKilometrage.setText(dec.format(computer.getDailyKilometrage().getRouteLength()) + " KM");
+            usersKilometrage.setText(dec.format(computer.getUserKilometrage().getRouteLength()) + " KM");
+        }), new KeyFrame(Duration.millis(500)));
+        kilometrageTimeline.setCycleCount(Animation.INDEFINITE);
 
     }
 
@@ -147,14 +181,19 @@ public class Controller {
             updateFuelBar();
             clockON();
             velocityMeterON();
-
+            kilometrageTimeline.play();
 
         } else {
             carOn = false;
+            cruiseControll = false;
+            cruiseControllButton.setSelected(false);
             updateFuelBar();
             clockOFF();
             velocityMeterOFF();
-            // wylaczanie samochodu
+            kilometrageTimeline.stop();
+            totalKilometrage.setText("0.0 KM");
+            dailyKilometrage.setText("0.0 KM");
+            usersKilometrage.setText("0.0 KM");
 
             fadeOilControls();
             fadeAccControls();
@@ -231,6 +270,8 @@ public class Controller {
         }
         if (keyEvent.getCode() == KeyCode.S || keyEvent.getCode() == KeyCode.DOWN) {
             slowingDown = true;
+            cruiseControll = false;
+            cruiseControllButton.setSelected(false);
         }
     }
 
@@ -249,7 +290,7 @@ public class Controller {
         }
     }
 
-    public void mirrorsButtonAction() throws IOException {
+    public void mirrorsButtonAction() {
         if (mirrorsButton.isSelected()){
             computer.getRearViewMirror().openMirror();
             computer.getWingMirrorLeft().openMirror();
@@ -339,7 +380,7 @@ public class Controller {
     }
 
     public void  updateSensors() {
-        computer.getVelocity().calculate(speedingUp, slowingDown);
+        computer.getVelocity().calculate(speedingUp, slowingDown, cruiseControll);
         computer.updateAccumulatorStatus(carOn);
         computer.updateOil(carOn);
         updateControls();
@@ -365,16 +406,50 @@ public class Controller {
         computer.getAccumulator().setCurrentLoad(AccumulatorLoadSensor.maxLoad);
     }
 
-    public void menuInformationsInstructions(ActionEvent actionEvent) {
-        Info.displayProgramInfo("Instrukcja aplikacji");
+    public void menuInformationsInstructions() {
+        MenuWindows.displayProgramInfo("Instrukcja aplikacji");
     }
 
-    public void menuInformationsAboutVehicle(ActionEvent actionEvent) {
-        Info.displayAutoInfo("Informacje o samochodzie");
+    public void menuInformationsAboutVehicle() {
+        MenuWindows.displayAutoInfo("Informacje o samochodzie");
     }
 
     public void writeComputerData() throws IOException {
         SerializationXML.writeComputerData(computer);
     }
 
+    public void userKilometrageResetButtonAction() {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Wyzeruj przebieg");
+        alert.setHeaderText("Czy jesteś pewny, że chcesz wyzerować przebieg?");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            computer.resetUserKilometrage();
+        }
+    }
+
+    public void cruiseControllButtonAction() {
+        if (carOn) {
+            cruiseControll = !cruiseControll;
+        } else cruiseControllButton.setSelected(false);
+
+    }
+
+    public void routesMenuAction() throws IOException {
+        Stage stage = new Stage();
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../interfacesLayer/routesWindow.fxml"));
+        Parent root = fxmlLoader.load();
+        Scene scene = new Scene(root);
+        stage.setTitle("Trasy");
+        stage.setHeight(500);
+        stage.setWidth(1000);
+        stage.setResizable(false);
+
+        RoutesWindowController routesController = fxmlLoader.getController();
+        routesController.setComputer(computer);
+        routesController.setRouteLabels();
+        stage.setScene(scene);
+        stage.show();
+    }
 }

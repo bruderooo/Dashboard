@@ -35,27 +35,37 @@
     <currentLoad>100.0</currentLoad>
   </accumulator>
   <oilLevel>
-    <currentAmount>99.86000000000003</currentAmount>
+    <currentAmount>80.16000000000395</currentAmount>
   </oilLevel>
   <oilTemperature>
     <currentTemperature>20.0</currentTemperature>
   </oilTemperature>
   <fuel>
-    <fuelAmount>79.60377846153847</fuelAmount>
+    <fuelAmount>40.496882410884155</fuelAmount>
   </fuel>
-  <totalMileage>
-    <startDate>2020-06-09T19:02:23.2049362</startDate>
-    <routeLength>20.1</routeLength>
-  </totalMileage>
-  <dailyMileage>
-    <startDate>2020-06-09T19:02:23.2049362</startDate>
-    <routeLength>0.0</routeLength>
-  </dailyMileage>
-  <userMileage>
-    <startDate>2020-06-09T19:02:23.2049362</startDate>
-    <routeLength>0.0</routeLength>
-  </userMileage>
+  <totalKilometrage>
+    <routeLength>14.866083333333307</routeLength>
+  </totalKilometrage>
+  <dailyKilometrage>
+    <routeLength>7.5474583333333705</routeLength>
+    <date>2020-06-13T01:40:10.3092645</date>
+  </dailyKilometrage>
+  <userKilometrage>
+    <routeLength>3.5212777777777755</routeLength>
+  </userKilometrage>
   <velocity>
-    <currentVelocity>34.399999999999984</currentVelocity>
+    <currentVelocity>0.0</currentVelocity>
   </velocity>
+  <routes>
+    <routes>
+      <logicLayer.Route.Route>
+        <routeLength>3.521277777777728</routeLength>
+        <startingLocation>Pabianice</startingLocation>
+        <endLocation>Łódź</endLocation>
+        <duration>103.0</duration>
+        <startDate>2020-06-13T01:40:41.4720971</startDate>
+        <endDate>2020-06-13T01:42:24.8982009</endDate>
+      </logicLayer.Route.Route>
+    </routes>
+  </routes>
 </logicLayer.onboardComputer.OnboardComputer>

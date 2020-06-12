@@ -24,12 +24,17 @@ public class Velocity {
         currentVelocity -= deceleration;
     }
 
-    public void calculate(boolean speedingUp, boolean slowingDown) {
+    public void calculate(boolean speedingUp, boolean slowingDown, boolean cruiseControll) {
+        if (cruiseControll) return;
         if(speedingUp) speedUp();
         if(slowingDown) slowDown();
         resistancesSlowDown();
         if(currentVelocity > maxVelocity ) currentVelocity = maxVelocity;
         if(currentVelocity < minVelocity ) currentVelocity = minVelocity;
+    }
+
+    public void setCurrentVelocity(double currentVelocity) {
+        this.currentVelocity = currentVelocity;
     }
 
     public double getCurrentVelocity() {

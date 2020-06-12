@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<VBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logicLayer.StackPaneController.Controller">
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="logicLayer.StackPaneController.MainController">
    <children>
       <MenuBar>
         <menus>
@@ -28,10 +28,9 @@
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Trasy">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Placeholder" />
-            </items>
-          </Menu>
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#routesMenuAction" text="Zarządzaj" />
+               </items></Menu>
             <Menu mnemonicParsing="false" text="Informacje">
               <items>
                 <MenuItem mnemonicParsing="false" onAction="#menuInformationsInstructions" text="Instrukcja" />
@@ -65,7 +64,7 @@
             </Label>
             <Button fx:id="leftBlinker" layoutX="910.0" layoutY="230.0" mnemonicParsing="false" onAction="#leftBlinkerPress" scaleX="2.0" styleClass="blinker" />
             <Button fx:id="rightBlinker" layoutX="953.0" layoutY="230.0" mnemonicParsing="false" onAction="#rightBlinkerPress" rotate="180.0" scaleX="2.0" styleClass="blinker" />
-            <ToggleButton fx:id="mirrorsButton" layoutX="167.0" layoutY="271.0" mnemonicParsing="false" onAction="#mirrorsButtonAction" prefHeight="46.0" prefWidth="86.0" styleClass="mirrorsButton" text="mirrors">
+            <ToggleButton fx:id="mirrorsButton" layoutX="167.0" layoutY="271.0" mnemonicParsing="false" onAction="#mirrorsButtonAction" prefHeight="46.0" prefWidth="86.0" styleClass="greenTogglebutton" text="mirrors">
                <font>
                   <Font name="System Bold" size="14.0" />
                </font>
@@ -150,7 +149,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="100.0" text="0.0 KM" />
+                        <Label fx:id="totalKilometrage" alignment="CENTER_RIGHT" prefHeight="37.0" prefWidth="100.0" text="0.0 KM" />
                      </children>
                   </HBox>
                   <HBox prefHeight="37.0" prefWidth="163.0">
@@ -160,7 +159,7 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="100.0" text="0.0 KM" />
+                        <Label fx:id="dailyKilometrage" alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="100.0" text="0.0 KM" />
                      </children>
                   </HBox>
                   <HBox prefHeight="37.0" prefWidth="163.0">
@@ -170,11 +169,17 @@
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="100.0" text="0.0 KM" />
+                        <Label fx:id="usersKilometrage" alignment="CENTER_RIGHT" prefHeight="39.0" prefWidth="100.0" text="0.0 KM" />
                      </children>
                   </HBox>
                </children>
             </VBox>
+            <Button fx:id="userKilometrageResetButton" layoutX="744.0" layoutY="441.0" mnemonicParsing="false" onAction="#userKilometrageResetButtonAction" text="Resetuj" />
+            <ToggleButton fx:id="cruiseControllButton" layoutX="553.0" layoutY="269.0" mnemonicParsing="false" onAction="#cruiseControllButtonAction" styleClass="greenTogglebutton" text="Tempomat">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </ToggleButton>
          </children>
       </Pane>
    </children>

@@ -8,8 +8,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.sql.Statement;
 
-public class Info {
+
+public class MenuWindows {
 
     public static void displayProgramInfo(String title){
         Stage window = new Stage();
@@ -41,7 +43,7 @@ public class Info {
         window.show();
     }
 
-    public static void displayAutoInfo(String title){
+    public static void displayAutoInfo(String title) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
@@ -67,5 +69,14 @@ public class Info {
         Scene scene = new Scene(grid);
         window.setScene(scene);
         window.show();
+    }
+
+    public static void displayRoutesWindow(String title) {
+        Stage window = new Stage();
+        window.initModality(Modality.APPLICATION_MODAL);
+        window.setTitle(title);
+        window.setWidth(700);
+        window.setHeight(600);
+
     }
 }

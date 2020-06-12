@@ -1,25 +1,23 @@
 package interfacesLayer;
 
 import dataLayer.ConnectToSQL;
+import dataLayer.RouteRepository;
+import logicLayer.Route.Kilometrage;
 import logicLayer.Route.Route;
 
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
 
+
 public class Main {
 
-    public static void main(String[] args) throws SQLException, InterruptedException {
+    public static void main(String[] args) throws SQLException {
 
-        ConnectToSQL connectToSQL = new ConnectToSQL();
+        ConnectToSQL sql = new ConnectToSQL();
 
-        Route route = new Route();
+        RouteRepository routes = new RouteRepository();
+        sql.getAllRoutes(routes);
+        System.out.println(routes.toString());
 
-        TimeUnit.SECONDS.sleep(10);
-
-        route.endRoute(69, connectToSQL);
-
-//        connectToSQL.getRoute(3);
-
-//        connectToSQL.getAllRoutes();
     }
 }

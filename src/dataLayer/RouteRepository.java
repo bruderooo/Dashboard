@@ -20,6 +20,14 @@ public class RouteRepository {
         routes.remove(item);
     }
 
+    public int size() {
+        return routes.size();
+    }
+
+    public void clear() {
+        routes.clear();
+    }
+
     public Route get(int index) {
         return routes.get(index);
     }

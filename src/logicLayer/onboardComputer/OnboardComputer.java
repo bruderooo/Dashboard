@@ -1,5 +1,8 @@
 package logicLayer.onboardComputer;
 
+import dataLayer.ConnectToSQL;
+import dataLayer.RouteRepository;
+import logicLayer.Route.Kilometrage;
 import logicLayer.Route.Route;
 import logicLayer.lights.*;
 import logicLayer.mirrors.RearViewMirror;
@@ -9,6 +12,8 @@ import logicLayer.sensors.FuelLevelSensor;
 import logicLayer.sensors.OilLevelSensor;
 import logicLayer.sensors.OilTemperatureSensor;
 import logicLayer.velocity.Velocity;
+
+import java.sql.SQLException;
 
 public class OnboardComputer implements Cloneable {
     // Initializing Ligts
@@ -30,14 +35,17 @@ public class OnboardComputer implements Cloneable {
     private OilTemperatureSensor oilTemperature;
     private FuelLevelSensor fuel;
 
-    // Mileage
-    private Route totalMileage;
-    private Route dailyMileage;
-    private Route userMileage;
+    // Kilometrage
+    private Kilometrage totalKilometrage;
+    private Kilometrage dailyKilometrage;
+    private Kilometrage userKilometrage;
+    private Route tmpRoute;
 
     // Initializing velocity
     private Velocity velocity;
 
+    // Initializing route repository
+    private RouteRepository routes;
 
     public OnboardComputer() {
 
@@ -61,14 +69,14 @@ public class OnboardComputer implements Cloneable {
         fuel = new FuelLevelSensor();
 
         // Mileage
-        totalMileage = new Route();
-        dailyMileage = new Route();
-        userMileage = new Route();
-
-        totalMileage.setRouteLength(20.1);
+        totalKilometrage = new Kilometrage();
+        dailyKilometrage = new Kilometrage(true);
+        userKilometrage = new Kilometrage();
 
         // Initializing velocity
         velocity = new Velocity();
+
+        routes = new RouteRepository();
     }
 
     public LowBeam getLowBeam() {
@@ -85,6 +93,14 @@ public class OnboardComputer implements Cloneable {
 
     public Velocity getVelocity() {
         return velocity;
+    }
+
+    public void setTmpRoute(Route tmpRoute) {
+        this.tmpRoute = tmpRoute;
+    }
+
+    public Route getTmpRoute() {
+        return tmpRoute;
     }
 
     public WingMirror getWingMirrorLeft() {
@@ -119,20 +135,24 @@ public class OnboardComputer implements Cloneable {
         return fogLightsFront;
     }
 
-    public Route getTotalMileage() {
-        return totalMileage;
+    public Kilometrage getTotalKilometrage() {
+        return totalKilometrage;
     }
 
-    public Route getDailyMileage() {
-        return dailyMileage;
+    public Kilometrage getDailyKilometrage() {
+        return dailyKilometrage;
     }
 
-    public Route getUserMileage() {
-        return userMileage;
+    public Kilometrage getUserKilometrage() {
+        return userKilometrage;
     }
 
     public PositionLights getPositionLights() {
         return positionLights;
+    }
+
+    public RouteRepository getRoutes() {
+        return routes;
     }
 
     public double fuelConsumption(boolean revs) {
@@ -176,4 +196,17 @@ public class OnboardComputer implements Cloneable {
             getHighBeam().switchLight();
         }
     }
+
+    public void updateKilometrage() {
+        double distance = getVelocity().getCurrentVelocity() * 0.5/3600;
+        getTotalKilometrage().setRouteLength( getTotalKilometrage().getRouteLength() + distance);
+        getDailyKilometrage().setRouteLength(getDailyKilometrage().getRouteLength() + distance);
+        getUserKilometrage().setRouteLength(getUserKilometrage().getRouteLength() + distance);
+    }
+
+    public void resetUserKilometrage() {
+        userKilometrage.setRouteLength(0);
+    }
+
+
 }
