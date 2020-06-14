@@ -1,6 +1,5 @@
 package logicLayer.onboardComputer;
 
-import dataLayer.ConnectToSQL;
 import dataLayer.RouteRepository;
 import logicLayer.Route.Kilometrage;
 import logicLayer.Route.Route;
@@ -10,13 +9,17 @@ import logicLayer.mirrors.WingMirror;
 import logicLayer.sensors.AccumulatorLoadSensor;
 import logicLayer.sensors.FuelLevelSensor;
 import logicLayer.sensors.OilLevelSensor;
-import logicLayer.sensors.OilTemperatureSensor;
 import logicLayer.velocity.Velocity;
 
-import java.sql.SQLException;
-
-public class OnboardComputer implements Cloneable {
-    // Initializing Ligts
+/**
+ * Glowna klasa projektu, odpowiada za funkcjonalnosc deski rozdzielczej.
+ * Obiekt tej klasy przechowuje wszystkie wartosci opisujace stan pojazdu.
+ *
+ * @author Daniel Londka
+ * @author Szymon Jacon
+ */
+public class OnboardComputer {
+    // Ligts
     private LowBeam lowBeam;
     private FullBeam highBeam;
     private TurnSignal turnSignals;
@@ -24,15 +27,14 @@ public class OnboardComputer implements Cloneable {
     private FogLightsFront fogLightsFront;
     private PositionLights positionLights;
 
-    // Initializing mirrors
+    // Mirrors
     private WingMirror wingMirrorLeft;
     private WingMirror wingMirrorRight;
     private RearViewMirror rearViewMirror;
 
-    // Initializing sensors
+    // Sensors
     private AccumulatorLoadSensor accumulator;
     private OilLevelSensor oilLevel;
-    private OilTemperatureSensor oilTemperature;
     private FuelLevelSensor fuel;
 
     // Kilometrage
@@ -41,12 +43,15 @@ public class OnboardComputer implements Cloneable {
     private Kilometrage userKilometrage;
     private Route tmpRoute;
 
-    // Initializing velocity
+    // Velocity
     private Velocity velocity;
 
-    // Initializing route repository
+    // Route repository
     private RouteRepository routes;
 
+    /**
+     * Konstruktor inicjalizuje obiekty opisujace stan pojazdu.
+     */
     public OnboardComputer() {
 
         // Initializing Ligts
@@ -65,7 +70,6 @@ public class OnboardComputer implements Cloneable {
         // Initializing sensors
         accumulator = new AccumulatorLoadSensor();
         oilLevel = new OilLevelSensor();
-        oilTemperature = new OilTemperatureSensor(20.0);
         fuel = new FuelLevelSensor();
 
         // Mileage
@@ -155,20 +159,31 @@ public class OnboardComputer implements Cloneable {
         return routes;
     }
 
-    public double fuelConsumption(boolean revs) {
+    /**
+     * Metoda odpowiedzialna za obliczanie spalania na podstawie predkosci oraz
+     * tego czy pojazd obecnie przyspiesza.
+     *
+     * @param revs informacja o tym czy pojazd przyspiesza
+     * @return średnie spalanie na ostatnim odcinku trasy w <b>l/100Km</b>
+     */
+    public double fuelConsumption(boolean revs, boolean cruiseControll) {
         double consumed;
         if (revs) {
             consumed = 0.7*FuelLevelSensor.fuelPerOneKm/Velocity.maxVelocity * getVelocity().getCurrentVelocity() + FuelLevelSensor.fuelPerOneKm*3/10;
         } else if (velocity.getCurrentVelocity() > 0.0) {
             consumed = (0.9 + Math.random()*0.4) /100;
+            if (cruiseControll) consumed *= 7;
         } else consumed = 0;
-
-
 
         fuel.setFuelAmount(fuel.getValue()-consumed);
         return consumed*100;
     }
 
+    /**
+     * Metoda odpowiedzialna za kontrole poziomu naladowania akumulatora.
+     *
+     * @param isOn czy samochod jest uruchomiony
+     */
     public void updateAccumulatorStatus(boolean isOn) {
         if (isOn && (getAccumulator().getValue() < AccumulatorLoadSensor.maxLoad) ) getAccumulator().setCurrentLoad(getAccumulator().getValue()+0.5);
         else if (!isOn && (getTurnSignals().getRightLight().isOn() || getTurnSignals().getLeftLight().isOn() || getLowBeam().isOn() || getHighBeam().isOn() ||
@@ -177,10 +192,23 @@ public class OnboardComputer implements Cloneable {
         }
     }
 
+    /**
+     * Metoda odpowiedzialna za poziom oleju silnikowego.
+     *
+     * @param isOn czy samochod jest uruchomiony
+     */
     public void updateOil(boolean isOn) {
         if (isOn && (getVelocity().getCurrentVelocity() > 0) && oilLevel.getValue() > 0) getOilLevel().setCurrentAmount(getOilLevel().getValue()-0.02);
     }
 
+    /**
+     * Metoda odpowiedzialna za swiatla pozycyjne, mijania i drogowe.
+     * Jezeli ktores ze swiatel sa wlaczone wszystkie inne sa wylaczane.
+     *
+     * @param position czy swiatla pozycyjne sa wlaczane
+     * @param low czy swiatla mijania sa wlaczane
+     * @param full czy swiatla drogowe sa wlaczane
+     */
     public void setGroupLights(boolean position, boolean low, boolean full) {
         if ( position) {
             getHighBeam().switchOff();
@@ -197,6 +225,9 @@ public class OnboardComputer implements Cloneable {
         }
     }
 
+    /**
+     * Metoda odpowiedzialna za obliczanie przebiegu i jego zmiane.
+     */
     public void updateKilometrage() {
         double distance = getVelocity().getCurrentVelocity() * 0.5/3600;
         getTotalKilometrage().setRouteLength( getTotalKilometrage().getRouteLength() + distance);
@@ -204,6 +235,9 @@ public class OnboardComputer implements Cloneable {
         getUserKilometrage().setRouteLength(getUserKilometrage().getRouteLength() + distance);
     }
 
+    /**
+     * Metoda odpowiedzialna za resetowanie przebiegu.
+     */
     public void resetUserKilometrage() {
         userKilometrage.setRouteLength(0);
     }

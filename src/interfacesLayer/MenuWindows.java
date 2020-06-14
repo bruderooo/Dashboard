@@ -8,11 +8,19 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.sql.Statement;
-
-
+/**
+ * Klasa odpowiedzialna za okna z informacjami o aplikacji oraz instrukcjami do niej.
+ *
+ * @author Daniel Londka
+ * @author Szymon Jacon
+ */
 public class MenuWindows {
 
+    /**
+     * Statyczna metoda ktorej wywolanie otwiera okno zawierajace informacje o programie i instrukcje.
+     *
+     * @param title tytul okna.
+     */
     public static void displayProgramInfo(String title){
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -43,6 +51,11 @@ public class MenuWindows {
         window.show();
     }
 
+    /**
+     * Metoda statyczna odpowiedzialna za otworzenie okna z informacjami o pojezdzie.
+     *
+     * @param title tytuł okna.
+     */
     public static void displayAutoInfo(String title) {
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -69,14 +82,5 @@ public class MenuWindows {
         Scene scene = new Scene(grid);
         window.setScene(scene);
         window.show();
-    }
-
-    public static void displayRoutesWindow(String title) {
-        Stage window = new Stage();
-        window.initModality(Modality.APPLICATION_MODAL);
-        window.setTitle(title);
-        window.setWidth(700);
-        window.setHeight(600);
-
     }
 }

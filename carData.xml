@@ -35,23 +35,20 @@
     <currentLoad>100.0</currentLoad>
   </accumulator>
   <oilLevel>
-    <currentAmount>80.16000000000395</currentAmount>
+    <currentAmount>69.60000000000605</currentAmount>
   </oilLevel>
-  <oilTemperature>
-    <currentTemperature>20.0</currentTemperature>
-  </oilTemperature>
   <fuel>
-    <fuelAmount>40.496882410884155</fuelAmount>
+    <fuelAmount>27.266624509057216</fuelAmount>
   </fuel>
   <totalKilometrage>
-    <routeLength>14.866083333333307</routeLength>
+    <routeLength>26.324374999999765</routeLength>
   </totalKilometrage>
   <dailyKilometrage>
-    <routeLength>7.5474583333333705</routeLength>
-    <date>2020-06-13T01:40:10.3092645</date>
+    <routeLength>3.289152777777774</routeLength>
+    <date>2020-06-14T18:04:31.3585911</date>
   </dailyKilometrage>
   <userKilometrage>
-    <routeLength>3.5212777777777755</routeLength>
+    <routeLength>14.979569444444387</routeLength>
   </userKilometrage>
   <velocity>
     <currentVelocity>0.0</currentVelocity>
@@ -59,12 +56,20 @@
   <routes>
     <routes>
       <logicLayer.Route.Route>
-        <routeLength>3.521277777777728</routeLength>
+        <routeLength>3.52128005027771</routeLength>
         <startingLocation>Pabianice</startingLocation>
         <endLocation>Łódź</endLocation>
         <duration>103.0</duration>
-        <startDate>2020-06-13T01:40:41.4720971</startDate>
-        <endDate>2020-06-13T01:42:24.8982009</endDate>
+        <startDate>2020-06-13T01:40:41</startDate>
+        <endDate>2020-06-13T01:42:24</endDate>
+      </logicLayer.Route.Route>
+      <logicLayer.Route.Route>
+        <routeLength>7.846139907836914</routeLength>
+        <startingLocation>Pabianice</startingLocation>
+        <endLocation>Piotrków Trybunalski</endLocation>
+        <duration>176.0</duration>
+        <startDate>2020-06-13T22:28:16</startDate>
+        <endDate>2020-06-13T22:31:13</endDate>
       </logicLayer.Route.Route>
     </routes>
   </routes>

@@ -5,12 +5,30 @@ import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+
+/**
+ * Klasa odpowiedzialna za za zapisywanie tras do bazy danych.
+ * Do realizacji tego zadania wykorzystany zostal MySQL.
+ * Do polaczenia z baza danych potrzebny jest kontroler JDBC.
+ *
+ * @author Daniel Londka
+ * @author Szymon Jacon
+ * @see <a href="https://dev.mysql.com/downloads/connector/j/">JDBC</a>
+ */
 public class ConnectToSQL {
-    private String url = "jdbc:mysql://localhost:3306/dashboard";
+    private static final String url = "jdbc:mysql://localhost:3306/dashboard";
+    private static final String user = "root";
+    private static final String password = "";
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * Konstruktor, tworzy baze danych <b>dashboard</b> jezeli ta nie istnieje.
+     * Tworzy w niej tabele <b>route</b> jeżeli ta nie istnieje.
+     *
+     * @throws SQLException the sql exception
+     */
     public ConnectToSQL() throws SQLException {
-        Connection connection = DriverManager.getConnection(url, "root", "");
+        Connection connection = DriverManager.getConnection(url, user, password);
         Statement statement = connection.createStatement();
 
         statement.execute("CREATE DATABASE IF NOT EXISTS dashboard;");
@@ -30,15 +48,26 @@ public class ConnectToSQL {
         connection.close();
     }
 
+    /**
+     * Metoda usuwa wszystkie rejestr tabeli <b>route</b> (tras).
+     *
+     * @throws SQLException
+     */
     public void clearDatabase() throws SQLException {
-        Connection connection = DriverManager.getConnection(url, "root", "");
+        Connection connection = DriverManager.getConnection(url, user, password);
         Statement statement = connection.createStatement();
         statement.execute("TRUNCATE TABLE routes;");
         connection.close();
     }
 
+    /**
+     * Metoda dodaje rejestr trasy do tabeli <b>routes</b> w bazie danych <b>dashboard</b>.
+     *
+     * @param route
+     * @throws SQLException
+     */
     public void addRoute(Route route) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, "root", "");
+        Connection connection = DriverManager.getConnection(url, user, password);
         Statement statement = connection.createStatement();
 
         String startDateString = route.getStartDate().format(formatter);
@@ -55,15 +84,14 @@ public class ConnectToSQL {
         connection.close();
     }
 
-    private void updateTable(Statement statement, double routeLength) throws SQLException {
-        String tableName = "routes";
-        statement.execute("" +
-                "UPDATE " + tableName +
-                " SET route_length = route_length + " + routeLength + ";");
-    }
-
+    /**
+     * Metoda odczytujaca rekordy z bazy danych.
+     *
+     * @param routes
+     * @throws SQLException
+     */
     public void getAllRoutes(RouteRepository routes) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, "root", "");
+        Connection connection = DriverManager.getConnection(url, user, password);
         Statement statement = connection.createStatement();
 
         ResultSet resultSet = statement.executeQuery("SELECT * FROM routes;");
@@ -77,24 +105,6 @@ public class ConnectToSQL {
             route.setRouteLength(resultSet.getFloat(6));
             route.setDuration(resultSet.getFloat(7));
             routes.add(route);
-        }
-
-        connection.close();
-    }
-
-    public void getRoute(int whichRoute) throws SQLException {
-        Connection connection = DriverManager.getConnection(url, "root", "");
-        Statement statement = connection.createStatement();
-
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM routes WHERE id = " + whichRoute + ";");
-
-        while (resultSet.next()) {
-            System.out.println("Route nr:       " + resultSet.getInt(1));
-            System.out.println("Start date:     " + resultSet.getString(2));
-            System.out.println("End date:       " + resultSet.getString(3));
-            System.out.println("Route length:   " + resultSet.getFloat(6));
-            System.out.println("Duration:       " + resultSet.getFloat(7));
-            System.out.println();
         }
 
         connection.close();

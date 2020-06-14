@@ -6,7 +6,6 @@ import interfacesLayer.MenuWindows;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -22,7 +21,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.fxml.FXML;
-import logicLayer.Route.Route;
 import logicLayer.onboardComputer.OnboardComputer;
 import logicLayer.sensors.AccumulatorLoadSensor;
 import logicLayer.sensors.FuelLevelSensor;
@@ -35,7 +33,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
-
+/**
+ * Klasa kontrolera dla glownego okna aplikacji.
+ * Przechowuje obiekty reprezentujace elementy interfejsu graficznego,
+ * oraz metody, ktore sa przez nie wywolywane.
+ *
+ * @author Daniel Londka
+ * @author Szymon Jacon
+ */
 public class MainController {
 
     @FXML
@@ -56,17 +61,21 @@ public class MainController {
     private DecimalFormat dec = new DecimalFormat("#0.0");
     private ConnectToSQL sql;
 
+    /**
+     * Metoda odpowiedzialna za inicjalizacje kontrolera, wywolywana po tym jak jego głowny element
+     * zostal odpowiedznio przetworzony.
+     * Tworzy nowy watek odpowiedzialny za regularne wykonywanie obliczen oraz zapisywanie danych
+     * komputera pokladowego co minute do pliku.
+     *
+     * @see <a href="https://openjfx.io/javadoc/11/javafx.fxml/javafx/fxml/Initializable.html#initialize(java.net.URL,java.util.ResourceBundle)">initialize</a>
+     */
     @FXML
     public void initialize() throws SQLException {
         computer = new OnboardComputer();
         sql = new ConnectToSQL();
         sql.getAllRoutes(computer.getRoutes());
 
-
-        // Read data from file about fuel, accumulator, oil
         SerializationXML.readComputerData(computer);
-
-
 
         Thread updatingThread = new Thread( () -> {
             int counter = 0;
@@ -152,28 +161,59 @@ public class MainController {
         }), new KeyFrame(Duration.millis(500)));
         kilometrageTimeline.setCycleCount(Animation.INDEFINITE);
 
+        // Timeline for showing velocity animation
+        velocityTimeline = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            velocity.setText( dec.format(computer.getVelocity().getCurrentVelocity()) + " km/h");
+            fuelConsumptionLabel.setText(dec.format(computer.fuelConsumption(speedingUp, cruiseControll)) + " L/100KM");
+        }), new KeyFrame(Duration.millis(500)));
+        velocityTimeline.setCycleCount(Animation.INDEFINITE);
+
+        // Timeline for clock animation
+        clockTimeline = new Timeline(new KeyFrame(Duration.ZERO, e -> {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+            clock.setText(LocalDateTime.now().format(formatter));
+        }), new KeyFrame(Duration.millis(100)));
+        clockTimeline.setCycleCount(Animation.INDEFINITE);
     }
 
+    /**
+     * Metoda wywolywana przy wcisnieciu przycisku odpowiedzialnego za swiatla mijania.
+     */
     public void lowBeamAction(){
-        updateLowFullBeams(false, true, false);
+        computer.setGroupLights(false, true, false);
     }
 
+    /**
+     * Metoda wywolywana przy wcisnieciu przycisku odpowiedzialnego za swiatla drogowe.
+     */
     public void fullBeamAction() {
-        updateLowFullBeams(false, false, true);
+        computer.setGroupLights(false, false, true);
     }
 
+    /**
+     * Metoda wywolywana przy wcisnieciu przycisku odpowiedzialnego za swiatla pozycyjne.
+     */
     public void positionLightsAction() {
-        updateLowFullBeams(true, false, false);
+        computer.setGroupLights(true, false, false);
     }
 
+    /**
+     * Metoda wywolywana przy wcisnieciu przycisku odpowiedzialnego za swiatla przeciwmglowe tylne.
+     */
     public void fogLightsBackAction() {
         computer.getFogLightsBack().switchLight();
     }
 
+    /**
+     * Metoda wywolywana przy wcisnieciu przycisku odpowiedzialnego za swiatla przeciwmglowe przednie.
+     */
     public void fogLightsFrontAction() {
         computer.getFogLightsFront().switchLight();
     }
 
+    /**
+     * Metoda wywolywana przy wcisnieciu przycisku odpowiedzialnego za uruchamianie / gaszenie samochodu.
+     */
     public void startEngine() {
         if (!carOn && computer.getAccumulator().getValue() > 0 && computer.getOilLevel().getValue() > 0) {
             carOn = true;
@@ -202,38 +242,40 @@ public class MainController {
         }
     }
 
+    /**
+     * Metoda odpowiedzialna za rozpoczecie animacji pokazujacej obecna predkosc.
+     */
     private void velocityMeterON() {
-        velocityTimeline = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-            velocity.setText( dec.format(computer.getVelocity().getCurrentVelocity()) + " km/h");
-            fuelConsumptionLabel.setText(dec.format(computer.fuelConsumption(speedingUp )) + " L/100KM");
-        }), new KeyFrame(Duration.millis(500)));
-        velocityTimeline.setCycleCount(Animation.INDEFINITE);
         velocityTimeline.play();
     }
 
+    /**
+     * Metoda odpowiedzialna za przerwanie animacji pokazujacej obecna predkosc i ustawienie wartosci predkosciomieza na 0.0 km/h.
+     */
     private void velocityMeterOFF() {
         velocityTimeline.stop();
         velocity.setText("0.0 km/h");
     }
 
+    /**
+     * Metoda odpowiedzialna za rozpoczecie animacji pokazujacej obecny czas.
+     */
     private void clockON() {
-        clockTimeline = new Timeline(new KeyFrame(Duration.ZERO, e -> {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            clock.setText(LocalDateTime.now().format(formatter));
-        }), new KeyFrame(Duration.millis(100)));
-        clockTimeline.setCycleCount(Animation.INDEFINITE);
         clockTimeline.play();
     }
 
+    /**
+     * Metoda odpowiedzialna za przerwanie animacji pokazujacej obecny czas i ustawienie wartosci na wyswietlaczu na 00:00:00.
+     */
     private void clockOFF() {
         clockTimeline.stop();
         clock.setText("00:00:00");
     }
 
-    private void updateLowFullBeams(boolean position, boolean low, boolean full) {
-        computer.setGroupLights(position, low, full);
-    }
-
+    /**
+     * Metoda wywolywana przez przycisniecie prawego kierunkowskazu, strzalki w prawo lub D.
+     * Wlacza prawy kierunkowskaz i wylacza lewy jezeli ten jest wlaczony.
+     */
     public void rightBlinkerPress() {
         if( !computer.getTurnSignals().getRightLight().isOn() ) {
             if( computer.getTurnSignals().getLeftLight().isOn() ) {
@@ -249,6 +291,10 @@ public class MainController {
         computer.getTurnSignals().turnRight();
     }
 
+    /**
+     * Metoda wywolywana przez przycisniecie przycisku lewego kierunkowskazu, strzalki w lewo lub A.
+     * Wlacza lewy kierunkowskaz i wylacza lewy jezeli ten byl wlaczony.
+     */
     public void leftBlinkerPress() {
         if( !computer.getTurnSignals().getLeftLight().isOn() ) {
             if( computer.getTurnSignals().getRightLight().isOn() ) {
@@ -264,6 +310,12 @@ public class MainController {
         computer.getTurnSignals().turnLeft();
     }
 
+    /**
+     * Metoda wczytujaca wcisniety przycisk z klawiatury i zmieniajaca odpowiedznie pola informujace
+     * o tym czy pojazd przyspiesza czy hamuje.
+     *
+     * @param keyEvent zdazenie wywolane przez wcisniecie przycisku
+     */
     public void handleKeyPressed(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.W || keyEvent.getCode() == KeyCode.UP) {
             speedingUp = true;
@@ -275,6 +327,13 @@ public class MainController {
         }
     }
 
+    /**
+     * Metoda wczytujaca zwolniony przycisk z klawiatury i zmieniajaca wartosci pol informujacych o tym
+     * czy pojazd przyspiesza czy hamuje.
+     * Moze rowniez wlaczyc kierunkowskaz.
+     *
+     * @param keyEvent
+     */
     public void handleKeyReleased(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W) {
             speedingUp = false;
@@ -290,6 +349,10 @@ public class MainController {
         }
     }
 
+    /**
+     * Metoda wykonywana przez przycisniecie przycisku obslugi lusterek.
+     * Sklada / rozklada lusterka pojazdu.
+     */
     public void mirrorsButtonAction() {
         if (mirrorsButton.isSelected()){
             computer.getRearViewMirror().openMirror();
@@ -304,8 +367,10 @@ public class MainController {
         }
     }
 
+    /**
+     * Metoda odpowiedzialna za przedstawianie ilosci paliwa w graficznym interfejsie uzytkownika.
+     */
     public void updateFuelBar() {
-
         if (computer.getFuel().getValue() <= 0.0 ) {
             fuelRect0.setFill(Color.web("#616160"));
         } else {
@@ -348,18 +413,27 @@ public class MainController {
         }
     }
 
+    /**
+     * Metoda ustawiajaca nieprzezroczystosc kontrolek akumulatora na 0.
+     */
     public void fadeAccControls() {
         accImg0.setOpacity(0);
         accImg1.setOpacity(0);
         accImg2.setOpacity(0);
     }
 
+    /**
+     * Metoda ustawiajaca nieprzezroczystosc kontrolek oleju na 0;
+     */
     public void fadeOilControls() {
         oilImg0.setOpacity(0);
         oilImg1.setOpacity(0);
         oilImg2.setOpacity(0);
     }
 
+    /**
+     * Metoda ustawiajaca kontrolki oleju i akumulatora na odpowiednie w zaleznosci od stanu ich czujnikow.
+     */
     public void updateControls() {
         fadeAccControls();
         fadeOilControls();
@@ -373,12 +447,19 @@ public class MainController {
         else oilImg0.setOpacity(100);
     }
 
+    /**
+     * Metoda odpowiedzialna za zmiany w paskach postepu i reprezentacji zbiornika paliwa.
+     */
     public void updateBars() {
         accumulatorBar.setProgress(computer.getAccumulator().getValue()/100);
         oilBar.setProgress(computer.getOilLevel().getValue()/100);
         updateFuelBar();
     }
 
+    /**
+     * Metoda odpowiedzialna za wywolanie metod zmieniajacych stan pojazdu w zaleznosci interakcji z uzytkownikiem,
+     * oraz metod odpowiedzialnych za reprezentacje stanu pojazdu przez interfejs graficzny.
+     */
     public void  updateSensors() {
         computer.getVelocity().calculate(speedingUp, slowingDown, cruiseControll);
         computer.updateAccumulatorStatus(carOn);
@@ -390,34 +471,62 @@ public class MainController {
         }
     }
 
+    /**
+     * Metoda odpowiedzialna za zmiane pola od ktorego zalezy czy watek utworzony do obliczen dalej funkcjonuje.
+     * Jest wywolywana przy zamykaniu aplikacji.
+     */
     public void stopThread() {
         appOn = false;
     }
 
+    /**
+     * Metoda uzupelniajaca poziom paliwa.
+     */
     public void refillFuel() {
         computer.getFuel().setFuelAmount(FuelLevelSensor.maxFuelAmount);
     }
 
+    /**
+     * Metoda uzupelniajaca poziom oleju.
+     */
     public void refillOil() {
         computer.getOilLevel().setCurrentAmount(OilLevelSensor.maximum);
     }
 
+    /**
+     * Metoda ladujaca akumulator.
+     */
     public void refillAccumulator() {
         computer.getAccumulator().setCurrentLoad(AccumulatorLoadSensor.maxLoad);
     }
 
+    /**
+     * Metoda wywolywana przy wybraniu z paska menu informacje opcji Instrukcja.
+     */
     public void menuInformationsInstructions() {
         MenuWindows.displayProgramInfo("Instrukcja aplikacji");
     }
 
+    /**
+     * Metoda wywolywana przy wybraniu z paska menu informacje opcji O pojezdzie.
+     */
     public void menuInformationsAboutVehicle() {
         MenuWindows.displayAutoInfo("Informacje o samochodzie");
     }
 
+    /**
+     * Metoda odpowiedzialna za wywolanie metody zapisujacej dane do pliku xml.
+     *
+     * @throws IOException
+     */
     public void writeComputerData() throws IOException {
         SerializationXML.writeComputerData(computer);
     }
 
+    /**
+     * Metoda wykonywana przy wcisnieciu przycisku Wyzeruj przebieg.
+     * Pyta uzytkownika o potwierdzenie i w zaleznosci od niego zeruje przebieg.
+     */
     public void userKilometrageResetButtonAction() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Wyzeruj przebieg");
@@ -429,6 +538,9 @@ public class MainController {
         }
     }
 
+    /**
+     * Metoda wykonywana przy wcisnieciu przycisku Tempomat.
+     */
     public void cruiseControllButtonAction() {
         if (carOn) {
             cruiseControll = !cruiseControll;
@@ -436,6 +548,12 @@ public class MainController {
 
     }
 
+    /**
+     * Metoda wykonywana przy wybraniu z menu tras opcji zarzadzaj.
+     * Otwiera nowe okno w ktorym mozna dodawac trasy lub usunac wszystkie trasy.
+     *
+     * @throws IOException
+     */
     public void routesMenuAction() throws IOException {
         Stage stage = new Stage();
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("../../interfacesLayer/routesWindow.fxml"));

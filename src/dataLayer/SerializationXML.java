@@ -2,7 +2,6 @@ package dataLayer;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
-import logicLayer.Route.Kilometrage;
 import logicLayer.onboardComputer.OnboardComputer;
 import java.io.File;
 import java.io.FileWriter;
@@ -11,6 +10,13 @@ import java.time.LocalDateTime;
 
 public class SerializationXML {
 
+    /**
+     * Metoda zapisujaca dane Klasy OnboardComputer oraz jej pol do pliku carDAta.xml.
+     *
+     * @param computer
+     *
+     * @throws IOException
+     */
     public static void writeComputerData(OnboardComputer computer) throws IOException {
         XStream xStream = new XStream(new DomDriver());
         String xmlString = xStream.toXML(computer);
@@ -19,6 +25,11 @@ public class SerializationXML {
         writer.close();
     }
 
+    /**
+     * Metoda odczytujaca dane z pliku carData.xml i zapisujaca je do instancji Klasy OnboardComputer.
+     *
+     * @param computer
+     */
     public static void readComputerData(OnboardComputer computer) {
         XStream xStream = new XStream(new DomDriver());
         File file = new File("carData.xml");

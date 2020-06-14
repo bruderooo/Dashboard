@@ -8,12 +8,27 @@ import javafx.stage.Stage;
 import logicLayer.StackPaneController.MainController;
 import java.io.IOException;
 
+
+/**
+ * Klasa odpowiedzialna za uruchomienie okna z graficznym interfejsem aplikacji.
+ *
+ * @author Daniel Londka
+ * @author Szymon Jacon
+ */
 public class Dashboard extends Application {
+
 
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Metoda wymagana przez implementacje interfejsu Application z biblioteki JavaFx.
+     * Umozliwia zaincjalizowanie okna aplikacji.
+     *
+     * @param primaryStage nowy Stage aplikacji.
+     * @throws IOException
+     */
     @Override
     public void start(Stage primaryStage) throws IOException {
 

@@ -5,6 +5,15 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Klasa odpowiedzialna za trasy uzytkownika, rozszeza Klase Kilometrage.
+ * Trasa sklada sie z: lokacji poczatkowej, lokacji koncowej, czasu trwania, daty i czasu poczatku, daty i czasu konca.
+ *
+ * @author Daniel Londka
+ * @author Szymon Jacon
+ *
+ * @see logicLayer.Route.Kilometrage
+ */
 public class Route extends Kilometrage {
     private String startingLocation;
     private String endLocation = null;
@@ -12,20 +21,34 @@ public class Route extends Kilometrage {
     private LocalDateTime startDate;
     private LocalDateTime endDate;
 
-    public Route() {}
+    /**
+     * Konstruktor klasy Route, wywoluje konstruktor superklasy Kilometrage.
+     */
+    public Route() {
+        super();
+    }
 
+    /**
+     * Konstruktor przyjmujacy lokalizacje poczatkowa i obecny przebieg calkowity pojazdu,
+     * do obliczenia pozniej dlugosci trasy.
+     *
+     * @param routeLength obecny przebieg calkowity pojazdu
+     * @param startingLocation lokalizacja poczatkowa
+     */
     public Route(double routeLength, String startingLocation) {
         super(routeLength);
         this.startDate = LocalDateTime.now();
         this.startingLocation = startingLocation;
     }
 
-    public void endRoute(String endLocation) {
-        this.endLocation = endLocation;
-        this.endDate = LocalDateTime.now();
-        this.duration = Duration.between(getStartDate(), getEndDate()).getSeconds();
-    }
-
+    /**
+     * Metoda odpowiedzialna za zakonczenie trasy przyjmuje lokalizacje koncowa i
+     * roznice calkowietego przebiegu pojazdu oraz przebiegu zapisanego wczesniej
+     * w polu route lenght, która jest dlugoscia trasy.
+     *
+     * @param endLocation lokalizacja koncowa
+     * @param routeLength roznica obecnego calkowietego przebiegu i przebiegu zapisanego w trakcie tworzenia trasy
+     */
     public void endRoute(String endLocation, double routeLength) {
         this.endLocation = endLocation;
         this.setRouteLength(routeLength);
@@ -33,6 +56,12 @@ public class Route extends Kilometrage {
         this.duration = Duration.between(getStartDate(), getEndDate()).getSeconds();
     }
 
+    /**
+     * Metoda przeksztalcajaca obiekt do postaci lancucha znakow uzywany do wyswietlania tras
+     * w przeznaczonym do tego oknie.
+     *
+     * @return lancuch znakow bedacy reprezentacja obiektu
+     */
     @Override
     public String toString() {
         DecimalFormat dec = new DecimalFormat("#0.0");
