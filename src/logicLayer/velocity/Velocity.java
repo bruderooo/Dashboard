@@ -1,7 +1,7 @@
 package logicLayer.velocity;
 
 /**
- * Metoda odpowiedzialna za predkosc.
+ * Klasa odpowiedzialna za predkosc.
  *
  * @author Daniel Londka
  * @author Szymon Jacon

@@ -17,17 +17,12 @@ import java.io.IOException;
  */
 public class Dashboard extends Application {
 
-
-    public static void main(String[] args) {
-        launch(args);
-    }
-
     /**
      * Metoda wymagana przez implementacje interfejsu Application z biblioteki JavaFx.
      * Umozliwia zaincjalizowanie okna aplikacji.
      *
      * @param primaryStage nowy Stage aplikacji.
-     * @throws IOException
+     * @throws IOException wyjatek sql
      */
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -45,9 +40,10 @@ public class Dashboard extends Application {
         primaryStage.setResizable(false);
 
         primaryStage.show();
+        MainController mainController = (MainController) loader.getController();
+
 
         primaryStage.setOnCloseRequest(event -> {
-            MainController mainController = (MainController) loader.getController();
             try {
                 mainController.writeComputerData();
             } catch (IOException e) {

@@ -164,7 +164,8 @@ public class OnboardComputer {
      * tego czy pojazd obecnie przyspiesza.
      *
      * @param revs informacja o tym czy pojazd przyspiesza
-     * @return średnie spalanie na ostatnim odcinku trasy w <b>l/100Km</b>
+     * @param cruiseControll informacja o tym czy jest wlaczony tempomat
+     * @return srednie spalanie na ostatnim odcinku trasy w <b>l/100Km</b>
      */
     public double fuelConsumption(boolean revs, boolean cruiseControll) {
         double consumed;

@@ -8,14 +8,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+/**
+ * Klasa odpowiedzialna za zapis stanu pojazdu do pliku xml i jego odczyt.
+ */
 public class SerializationXML {
 
     /**
      * Metoda zapisujaca dane Klasy OnboardComputer oraz jej pol do pliku carDAta.xml.
      *
-     * @param computer
+     * @param computer komputer pokladowy
      *
-     * @throws IOException
+     * @throws IOException wyjatek sql
      */
     public static void writeComputerData(OnboardComputer computer) throws IOException {
         XStream xStream = new XStream(new DomDriver());
@@ -28,7 +31,7 @@ public class SerializationXML {
     /**
      * Metoda odczytujaca dane z pliku carData.xml i zapisujaca je do instancji Klasy OnboardComputer.
      *
-     * @param computer
+     * @param computer komputer pokladowy
      */
     public static void readComputerData(OnboardComputer computer) {
         XStream xStream = new XStream(new DomDriver());

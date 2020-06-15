@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 public class MenuWindows {
 
     /**
-     * Statyczna metoda ktorej wywolanie otwiera okno zawierajace informacje o programie i instrukcje.
+     * Metoda statyczna ktorej wywolanie otwiera okno zawierajace informacje o programie i instrukcje.
      *
      * @param title tytul okna.
      */
@@ -54,7 +54,7 @@ public class MenuWindows {
     /**
      * Metoda statyczna odpowiedzialna za otworzenie okna z informacjami o pojezdzie.
      *
-     * @param title tytuł okna.
+     * @param title tytul okna.
      */
     public static void displayAutoInfo(String title) {
         Stage window = new Stage();

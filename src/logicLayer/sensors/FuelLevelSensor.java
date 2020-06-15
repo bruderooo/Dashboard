@@ -26,6 +26,10 @@ public class FuelLevelSensor implements Sensor {
         this.fuelAmount = fuelAmount;
     }
 
+    public String toString() {
+        return "Poziom zbiornika paliwa: " + fuelAmount + "/" + maxFuelAmount;
+    }
+
     /**
      * Metoda zwracajaca obecna ilosc paliwa w zbiorniku.
      *

@@ -25,6 +25,10 @@ public class OilLevelSensor implements Sensor {
         this.currentAmount = currentAmount;
     }
 
+    public String toString() {
+        return "Poziom oleju: " + currentAmount + "/" + maximum;
+    }
+
     /**
      * Metoda zwraca wartosc obecnego poziomu oleju silnikowego jako wartosc procentowa
      *

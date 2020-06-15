@@ -25,6 +25,11 @@ public class AccumulatorLoadSensor implements Sensor {
         this.currentLoad = currentLoad;
     }
 
+    @Override
+    public String toString() {
+        return "Poziom naładowania akumulatora: " + currentLoad + "/" + maxLoad;
+    }
+
     /**
      * Metoda zwracajaca wartosc naladowania akumulatora.
      *

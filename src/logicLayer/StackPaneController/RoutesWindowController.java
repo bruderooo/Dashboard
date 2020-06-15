@@ -29,7 +29,7 @@ public class RoutesWindowController {
     private ArrayList<Label> labels = new ArrayList<>();
 
     /**
-     * Metoda odpowiedzialna za inicjalizacje kontrolera, wywolywana po tym jak jego głowny element
+     * Metoda odpowiedzialna za inicjalizacje kontrolera, wywolywana po tym jak jego glowny element
      * zostal odpowiedznio przetworzony.
      *
      * @see <a href="https://openjfx.io/javadoc/11/javafx.fxml/javafx/fxml/Initializable.html#initialize(java.net.URL,java.util.ResourceBundle)">initialize</a>
@@ -65,7 +65,7 @@ public class RoutesWindowController {
      * czas zakonczenia trasy oraz dlugosc trasy.
      * Nowo utworzona trasa zostaje dodana do bazy danych.
      *
-     * @throws SQLException
+     * @throws SQLException wyjatek sql
      */
     public void endRouteButton() throws SQLException {
         if (computer.getTmpRoute() != null) {
@@ -93,7 +93,7 @@ public class RoutesWindowController {
      * Metoday wykonywana przy wciscnieciu przycisku "usun wszystkie trasy".
      * Usuwa wszystkie trasy z bazy danych
      *
-     * @throws SQLException
+     * @throws SQLException wyjatek sql
      */
     public void deleteAllRoutesButtonAction() throws SQLException {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

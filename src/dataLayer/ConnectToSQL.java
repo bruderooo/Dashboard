@@ -9,11 +9,12 @@ import java.time.format.DateTimeFormatter;
 /**
  * Klasa odpowiedzialna za za zapisywanie tras do bazy danych.
  * Do realizacji tego zadania wykorzystany zostal MySQL.
- * Do polaczenia z baza danych potrzebny jest kontroler JDBC.
+ * Do polaczenia z baza danych potrzebny jest kontroler MySQL Connector Java
  *
  * @author Daniel Londka
  * @author Szymon Jacon
- * @see <a href="https://dev.mysql.com/downloads/connector/j/">JDBC</a>
+ *
+ * @see <a href="https://dev.mysql.com/downloads/connector/j/">MySQL Connector Java</a>
  */
 public class ConnectToSQL {
     private static final String url = "jdbc:mysql://localhost:3306/dashboard";
@@ -25,7 +26,7 @@ public class ConnectToSQL {
      * Konstruktor, tworzy baze danych <b>dashboard</b> jezeli ta nie istnieje.
      * Tworzy w niej tabele <b>route</b> jeżeli ta nie istnieje.
      *
-     * @throws SQLException the sql exception
+     * @throws SQLException wyjatek sql
      */
     public ConnectToSQL() throws SQLException {
         Connection connection = DriverManager.getConnection(url, user, password);
@@ -49,9 +50,9 @@ public class ConnectToSQL {
     }
 
     /**
-     * Metoda usuwa wszystkie rejestr tabeli <b>route</b> (tras).
+     * Metoda usuwa wszystkie rekordy tabeli <b>route</b> (tras).
      *
-     * @throws SQLException
+     * @throws SQLException wyjatek sql
      */
     public void clearDatabase() throws SQLException {
         Connection connection = DriverManager.getConnection(url, user, password);
@@ -61,10 +62,10 @@ public class ConnectToSQL {
     }
 
     /**
-     * Metoda dodaje rejestr trasy do tabeli <b>routes</b> w bazie danych <b>dashboard</b>.
+     * Metoda dodaje rekord trasy do tabeli <b>routes</b> w bazie danych <b>dashboard</b>.
      *
-     * @param route
-     * @throws SQLException
+     * @param route trasa ktora dodajemy do bazy danych
+     * @throws SQLException wyjatek sql
      */
     public void addRoute(Route route) throws SQLException {
         Connection connection = DriverManager.getConnection(url, user, password);
@@ -87,8 +88,8 @@ public class ConnectToSQL {
     /**
      * Metoda odczytujaca rekordy z bazy danych.
      *
-     * @param routes
-     * @throws SQLException
+     * @param routes zbior wszystkich tras
+     * @throws SQLException wyjatek sql
      */
     public void getAllRoutes(RouteRepository routes) throws SQLException {
         Connection connection = DriverManager.getConnection(url, user, password);

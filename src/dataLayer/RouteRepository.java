@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 /**
  * Klasa przechowujaca trasy uzytkownika.
- * Do tego celu została wykozytstana kolekcja <b>ArrayList</b>.
+ * Do tego celu zostala wykozytstana kolekcja <b>ArrayList</b>.
  *
  * @author Daniel Londka
  * @author Szymon Jacon

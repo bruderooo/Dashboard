@@ -35,20 +35,20 @@
     <currentLoad>100.0</currentLoad>
   </accumulator>
   <oilLevel>
-    <currentAmount>69.60000000000605</currentAmount>
+    <currentAmount>61.020000000006696</currentAmount>
   </oilLevel>
   <fuel>
-    <fuelAmount>27.266624509057216</fuelAmount>
+    <fuelAmount>71.48059473475102</fuelAmount>
   </fuel>
   <totalKilometrage>
-    <routeLength>26.324374999999765</routeLength>
+    <routeLength>31.772486111111245</routeLength>
   </totalKilometrage>
   <dailyKilometrage>
-    <routeLength>3.289152777777774</routeLength>
-    <date>2020-06-14T18:04:31.3585911</date>
+    <routeLength>0.023888888888888887</routeLength>
+    <date>2020-06-15T12:01:21.1531436</date>
   </dailyKilometrage>
   <userKilometrage>
-    <routeLength>14.979569444444387</routeLength>
+    <routeLength>20.42768055555582</routeLength>
   </userKilometrage>
   <velocity>
     <currentVelocity>0.0</currentVelocity>
@@ -70,6 +70,14 @@
         <duration>176.0</duration>
         <startDate>2020-06-13T22:28:16</startDate>
         <endDate>2020-06-13T22:31:13</endDate>
+      </logicLayer.Route.Route>
+      <logicLayer.Route.Route>
+        <routeLength>1.4211699962615967</routeLength>
+        <startingLocation>Nowa Wieś</startingLocation>
+        <endLocation>Bychlew</endLocation>
+        <duration>53.0</duration>
+        <startDate>2020-06-14T18:42:14</startDate>
+        <endDate>2020-06-14T18:43:08</endDate>
       </logicLayer.Route.Route>
     </routes>
   </routes>

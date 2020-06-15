@@ -1,7 +1,7 @@
 package logicLayer.lights;
 
 /**
- * Klasa generyczna odpowiedzialna za swiatła.
+ * Klasa generyczna odpowiedzialna za swiatla.
  *
  * @author Daniel Londka
  * @author Szymon Jacon

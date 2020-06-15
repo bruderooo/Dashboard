@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Klasa odpowiedzialna za trasy uzytkownika, rozszeza Klase Kilometrage.
+ * Klasa odpowiedzialna za trasy uzytkownika, rozszeza klase Kilometrage.
  * Trasa sklada sie z: lokacji poczatkowej, lokacji koncowej, czasu trwania, daty i czasu poczatku, daty i czasu konca.
  *
  * @author Daniel Londka
@@ -57,7 +57,7 @@ public class Route extends Kilometrage {
     }
 
     /**
-     * Metoda przeksztalcajaca obiekt do postaci lancucha znakow uzywany do wyswietlania tras
+     * Metoda przeksztalcajaca obiekt do postaci lancucha znakow, ktory jest uzywany do wyswietlania tras
      * w przeznaczonym do tego oknie.
      *
      * @return lancuch znakow bedacy reprezentacja obiektu

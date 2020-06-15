@@ -39,6 +39,10 @@ public class Kilometrage {
         this.routeLength = routeLength;
     }
 
+    public String toString() {
+        return Double.toString(routeLength);
+    }
+
     public void setDate(LocalDateTime startDate) {
         this.date = startDate;
     }

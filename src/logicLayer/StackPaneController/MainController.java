@@ -32,6 +32,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.Scanner;
 
 /**
  * Klasa kontrolera dla glownego okna aplikacji.
@@ -62,15 +63,17 @@ public class MainController {
     private ConnectToSQL sql;
 
     /**
-     * Metoda odpowiedzialna za inicjalizacje kontrolera, wywolywana po tym jak jego głowny element
+     * Metoda odpowiedzialna za inicjalizacje kontrolera, wywolywana po tym jak jego glowny element
      * zostal odpowiedznio przetworzony.
      * Tworzy nowy watek odpowiedzialny za regularne wykonywanie obliczen oraz zapisywanie danych
      * komputera pokladowego co minute do pliku.
      *
+     * @throws SQLException wyjatek sql
+     *
      * @see <a href="https://openjfx.io/javadoc/11/javafx.fxml/javafx/fxml/Initializable.html#initialize(java.net.URL,java.util.ResourceBundle)">initialize</a>
      */
     @FXML
-    public void initialize() throws SQLException {
+    public void initialize() throws SQLException, IOException {
         computer = new OnboardComputer();
         sql = new ConnectToSQL();
         sql.getAllRoutes(computer.getRoutes());
@@ -272,6 +275,10 @@ public class MainController {
         clock.setText("00:00:00");
     }
 
+    public boolean isAppOn() {
+        return appOn;
+    }
+
     /**
      * Metoda wywolywana przez przycisniecie prawego kierunkowskazu, strzalki w prawo lub D.
      * Wlacza prawy kierunkowskaz i wylacza lewy jezeli ten jest wlaczony.
@@ -327,12 +334,16 @@ public class MainController {
         }
     }
 
+    public OnboardComputer getComputer() {
+        return computer;
+    }
+
     /**
      * Metoda wczytujaca zwolniony przycisk z klawiatury i zmieniajaca wartosci pol informujacych o tym
      * czy pojazd przyspiesza czy hamuje.
      * Moze rowniez wlaczyc kierunkowskaz.
      *
-     * @param keyEvent
+     * @param keyEvent zdazenie wywolane przez zwolnienie przycisku
      */
     public void handleKeyReleased(KeyEvent keyEvent) {
         if (keyEvent.getCode() == KeyCode.UP || keyEvent.getCode() == KeyCode.W) {
@@ -517,7 +528,7 @@ public class MainController {
     /**
      * Metoda odpowiedzialna za wywolanie metody zapisujacej dane do pliku xml.
      *
-     * @throws IOException
+     * @throws IOException wyjatek wejscia wyjscia
      */
     public void writeComputerData() throws IOException {
         SerializationXML.writeComputerData(computer);
@@ -552,7 +563,7 @@ public class MainController {
      * Metoda wykonywana przy wybraniu z menu tras opcji zarzadzaj.
      * Otwiera nowe okno w ktorym mozna dodawac trasy lub usunac wszystkie trasy.
      *
-     * @throws IOException
+     * @throws IOException wyjatek wejscia wyjscia
      */
     public void routesMenuAction() throws IOException {
         Stage stage = new Stage();
